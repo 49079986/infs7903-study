@@ -10,6 +10,8 @@ A static, bilingual database learning website with 13 chapters and 11 interactiv
 - Explore joins, filtering, ranking, recursion, materialized views, indexes, anti-joins, selectivity, statement snapshots and deadlocks.
 - Read 265 annotated lines across 20 anonymous SQL files. Practise explaining all 24 task summaries in the tutor room.
 - Progress and drafts stay in your browser. There is no account system or cross-device synchronization.
+- Use **作业 A2** in the main navigation, then the persistent A2 navigation to switch between the introduction, Q1–Q4, tutor practice and the full walkthrough. Narrow windows use a native unit selector.
+- Designed for modern macOS Safari and Chrome as well as Windows: system fonts, SF Mono / Menlo code fallbacks, keyboard focus, responsive navigation and a selected-code fallback for Command+C.
 
 ## Publish with GitHub Pages
 

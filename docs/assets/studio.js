@@ -16,8 +16,45 @@
  const inA2Special=here.includes('/specials/a2/');document.body.classList.toggle('a2-special-page',inA2Special);
  if(inA2Special){const sidebar=document.querySelector('.sidebar'),chapters=document.getElementById('chapter-nav'),title=document.querySelector('.special-sidebar-title'),nav=document.querySelector('.special-sidebar-links');if(sidebar&&chapters&&title&&nav){sidebar.insertBefore(title,chapters);sidebar.insertBefore(nav,chapters);}}
  document.querySelectorAll('.main-nav a,.assignment-sidebar-links a,.special-sidebar-links a,.chapter-link').forEach(a=>{const u=new URL(a.href);let active=u.pathname===here;if(a.closest('.main-nav')&&a.textContent==='专题讲义')active=/\/chapters\//.test(here);if(a.matches('.a2-nav'))active=here.includes('/specials/a2/')||here.endsWith('/review/a2.html');if(active)a.setAttribute('aria-current','page');});
+ const a2Nav=document.querySelector('[data-a2-section-nav]'),a2Select=document.querySelector('[data-a2-section-select]');
+ if(a2Nav){
+  a2Nav.querySelectorAll('[data-a2-route]').forEach(a=>{if(new URL(a.href).pathname===here)a.setAttribute('aria-current','page');});
+  if(a2Select){for(const o of a2Select.options)if(new URL(o.value,location.href).pathname===here)a2Select.value=o.value;a2Select.addEventListener('change',()=>location.assign(a2Select.value));a2Select.closest('label').hidden=false;document.body.classList.add('a2-nav-ready');}
+ }
+ // Measure the actual header stack: resized Mac windows and translated labels
+ // must not hide anchored questions or individual code lines behind sticky bars.
+ const topbar=document.querySelector('.topbar');
+ function measureNavigation(){
+  if(!topbar)return;const gap=innerWidth<=800?8:12,top=parseFloat(getComputedStyle(topbar).top)||0;
+  const bottom=top+topbar.getBoundingClientRect().height;
+  document.documentElement.style.setProperty('--a2-nav-top',`${Math.ceil(bottom+gap)}px`);
+  const secondary=a2Nav&&getComputedStyle(a2Nav).display!=='none'?a2Nav.getBoundingClientRect().height+gap:0;
+  document.documentElement.style.setProperty('--site-header-offset',`${Math.ceil(bottom+secondary+16)}px`);
+ }
+ if('ResizeObserver' in window){const observer=new ResizeObserver(measureNavigation);if(topbar)observer.observe(topbar);if(a2Nav)observer.observe(a2Nav);}
+ addEventListener('resize',measureNavigation);document.fonts?.ready.then(measureNavigation);measureNavigation();
  document.querySelectorAll('[data-expand-answers]').forEach(button=>button.addEventListener('click',()=>{const open=button.dataset.expandAnswers==='open';document.querySelectorAll('.a2-part>details').forEach(d=>d.open=open);}));
- document.querySelectorAll('[data-copy-code]').forEach(button=>button.addEventListener('click',async()=>{const code=button.closest('.code-block').querySelector('code').textContent;try{if(navigator.clipboard?.writeText)await navigator.clipboard.writeText(code);else{const ta=document.createElement('textarea');ta.value=code;ta.style.position='fixed';ta.style.left='-9999px';document.body.append(ta);ta.select();if(!document.execCommand('copy'))throw Error('copy unavailable');ta.remove();}toast('SQL 已复制 / SQL copied');}catch{toast('请选择下方 SQL 后复制 / Select the SQL to copy');}}));
+ const apple=/Mac|iPhone|iPad|iPod/i.test(navigator.userAgentData?.platform||navigator.platform||'');
+ function manualCopy(code,trigger){
+  const dialog=document.createElement('dialog');dialog.className='sql-copy-dialog';dialog.setAttribute('aria-labelledby','sql-copy-heading');
+  const heading=document.createElement('h2');heading.id='sql-copy-heading';heading.textContent='复制 SQL / Copy SQL';
+  const help=document.createElement('p');help.textContent='代码已选中。Mac 按 ⌘ Command + C；Windows / Linux 按 Ctrl + C。';
+  const area=document.createElement('textarea');area.readOnly=true;area.value=code;area.setAttribute('aria-label','完整 SQL 代码');area.spellcheck=false;
+  const close=document.createElement('button');close.textContent='完成 / Close';close.addEventListener('click',()=>dialog.close());
+  dialog.append(heading,help,area,close);document.body.append(dialog);
+  dialog.addEventListener('close',()=>{dialog.remove();trigger.focus({preventScroll:true});},{once:true});
+  dialog.showModal();area.focus();area.select();area.setSelectionRange(0,code.length);
+ }
+ document.querySelectorAll('[data-copy-code]').forEach(button=>{button.title=`复制完整 SQL；手动复制可用 ${apple?'⌘ C':'Ctrl+C'}`;
+  const actions=document.createElement('div');actions.className='code-actions';button.before(actions);actions.append(button);
+  const select=document.createElement('button');select.type='button';select.className='copy-code';select.dataset.selectCode='';select.textContent='选择代码';select.setAttribute('aria-label','选择完整 SQL 以便手动复制');select.addEventListener('click',()=>manualCopy(button.closest('.code-block').querySelector('code').textContent,select));actions.append(select);
+  button.addEventListener('click',async()=>{
+  const code=button.closest('.code-block').querySelector('code').textContent;
+  try{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(code);toast('SQL 已复制 / SQL copied');return;}}catch{}
+  const ta=document.createElement('textarea');ta.value=code;ta.style.cssText='position:fixed;left:-9999px;top:0';ta.setAttribute('aria-hidden','true');document.body.append(ta);ta.focus({preventScroll:true});ta.select();ta.setSelectionRange(0,code.length);
+  let copied=false;try{copied=document.execCommand('copy');}catch{}ta.remove();button.focus({preventScroll:true});
+  if(copied)toast('SQL 已复制 / SQL copied');else manualCopy(code,button);
+ });});
  document.querySelector('[data-export-progress]')?.addEventListener('click',()=>{const blob=new Blob([JSON.stringify({...state,exportedAt:new Date().toISOString()},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='INFS7903-学习记录.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);toast('学习记录已导出 / Progress exported');});
  document.querySelector('[data-import-progress]')?.addEventListener('change',async e=>{try{const f=e.target.files[0];if(!f)return;if(f.size>1000000)throw Error();const x=JSON.parse(await f.text());if(x.version!==1||typeof x.mastery!=='object'||!x.mastery)throw Error();const mastery={};for(const [k,v]of Object.entries(x.mastery))if(/^(ch\d{2}|A2-[\d.]+)$/.test(k)&&typeof v==='boolean')mastery[k]=v;state.mastery=mastery;reading(x.language);progress();save();toast('学习记录已导入 / Progress imported');}catch{toast('请选择本学习站导出的 JSON / Use an exported study record');}e.target.value='';});
  if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&matchMedia('(hover:hover)').matches)document.querySelectorAll('.topic-card').forEach(card=>card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect();card.style.setProperty('--spot-x',`${e.clientX-r.left}px`);card.style.setProperty('--spot-y',`${e.clientY-r.top}px`);}));

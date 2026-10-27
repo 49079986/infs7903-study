@@ -11,11 +11,12 @@ SITE=ROOT/'docs'
 class Page(HTMLParser):
     def __init__(self,text):
         super().__init__(convert_charrefs=True)
-        self.ids=[];self.references=[];self.labs=[];self.parts=[];self.feed(text)
+        self.ids=[];self.references=[];self.labs=[];self.parts=[];self.a2_routes=[];self.feed(text)
     def handle_starttag(self,tag,attrs):
         a=dict(attrs)
         if 'id' in a:self.ids.append(a['id'])
         if 'data-a2-lab' in a:self.labs.append(a['data-a2-lab'])
+        if 'data-a2-route' in a:self.a2_routes.append(a.get('href'))
         if 'a2-part' in a.get('class','').split():self.parts.append(a.get('id'))
         for attr in ('href','src'):
             if attr in a:self.references.append((tag,a[attr]))
@@ -29,6 +30,7 @@ def main():
         if p.suffix.lower() in ('.pdf','.docx','.png','.jpg','.jpeg','.zip','.pyc') or '/source/' in '/'+rel:errors.append(f'Excluded private/archive file: {rel}')
         if private.search(p.read_text(encoding='utf-8')):errors.append(f'Private identifier or local preview URL: {rel}')
     for rel,page in pages.items():
+        if rel!='404.html' and len(page.a2_routes)!=8:errors.append(f'A2 shared navigation is incomplete: {rel}')
         for id,n in Counter(page.ids).items():
             if n>1:errors.append(f'Duplicate ID: {rel} #{id}')
         for tag,value in page.references:
