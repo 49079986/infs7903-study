@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="#0a0a0a" name="theme-color"/><meta content="INFS7903 双语离线学习空间：课程讲义、逐题复盘、真实 PostgreSQL 实验与自测。" name="description"/>
+<title>A2 Q1 题意、互动与代码逐行精讲 · INFS7903 Study Studio</title>
+<link href="../../assets/style.css" rel="stylesheet"/><link href="../../assets/studio.css" rel="stylesheet"/>
+<script defer="" src="../../assets/app.js"></script><script defer="" src="../../assets/studio.js"></script><link href="../../assets/a2-labs.css" rel="stylesheet"/><script defer="" src="../../assets/a2-labs.js"></script></head>
+<body data-studio-root="../../"><a class="skip" href="#main">跳到主要内容 / Skip to content</a>
+<header class="topbar"><a class="brand" href="../../index.html"><span class="brand-icon"><svg aria-hidden="true" fill="none" viewbox="0 0 36 36"><ellipse cx="18" cy="9" rx="12" ry="5" stroke="currentColor" stroke-width="1.3"></ellipse><path d="M6 9v9c0 2.8 5.4 5 12 5s12-2.2 12-5V9M6 18v9c0 2.8 5.4 5 12 5s12-2.2 12-5v-9" stroke="currentColor" stroke-width="1.3"></path></svg></span><span>INFS7903<small>STUDY STUDIO / 2026</small></span></a>
+<nav aria-label="主导航" class="main-nav"><a href="../../index.html">学习地图</a><a href="../../chapters/ch01.html">专题讲义</a><a href="../../review/assignments.html">作业复盘</a><a class="a2-nav" href="../../specials/a2/index.html">A2 专项</a><a href="../../review/questions.html">练习与索引</a><a href="../../reports/status.html">资料与下载</a></nav>
+<div class="reading-control"><label for="reading-mode">READING / 阅读</label><select aria-label="阅读语言 / Reading language" data-reading-select="" id="reading-mode"><option value="both">English + 中文</option><option value="en">English only</option><option value="zh">仅中文</option></select></div><button aria-label="打印当前页" class="print-control" data-print="" title="打印当前页 / Print this page">↗</button></header>
+<div class="studio-layout"><aside aria-label="学习路径" class="sidebar"><div class="sidebar-title">COURSE PATH <span>学习路径</span></div>
+<label class="search-label" for="course-search">查找专题或关键词</label><div class="searchbox"><span aria-hidden="true">⌕</span><input autocomplete="off" data-nav-search="" id="course-search" placeholder="B+ 树、MVCC、死锁…" type="search"/></div>
+<nav id="chapter-nav"><a class="chapter-link" data-nav-item="" href="../../chapters/ch01.html"><span class="num">01</span><span><span class="nav-en" lang="en">Relational modelling and normalisation</span><span class="nav-zh" lang="zh-CN">关系模型与规范化</span></span></a><a class="chapter-link" data-nav-item="" href="../../chapters/ch02.html"><span class="num">02</span><span><span class="nav-en" lang="en">SQL reasoning and basic operations</span><span class="nav-zh" lang="zh-CN">SQL 查询思维与基础操作</span></span></a><a class="chapter-link" data-nav-item="" href="../../chapters/ch03.html"><span class="num">03</span><span><span class="nav-en" lang="en">Views and materialised views</span><span class="nav-zh" lang="zh-CN">视图与物化视图</span></span></a><a class="chapter-link" data-nav-item="" href="../../chapters/ch04.html"><span class="num">04</span><span><span class="nav-en" lang="en">Constraints, sequences and triggers</span><span class="nav-zh" lang="zh-CN">完整性约束、序列与触发器</span></span></a><a class="chapter-link" data-nav-item="" href="../../chapters/ch05.html"><span class="num">05</span><span><span class="nav-en" lang="en">Storage organisation and disk calculations</span><span class="nav-zh" lang="zh-CN">存储组织与磁盘计算</span></span></a><a class="chapter-link" data-nav-item="" href="../../chapters/ch06.html"><span class="num">06</span><span><span class="nav-en" lang="en">Indexes and B+ trees</span><span class="nav-zh" lang="zh-CN">索引与 B+ 树</span></span></a><a class="chapter-link" data-nav-item="" href="../../chapters/ch07.html"><span class="num">07</span><span><span class="nav-en" lang="en">Relational algebra and query formulation</span><span class="nav-zh" lang="zh-CN">关系代数与查询表达</span></span></a><a class="chapter-link" data-nav-item="" href="../../chapters/ch08.html"><span class="num">08</span><span><span class="nav-en" lang="en">Query processing and cost models</span><span class="nav-zh" lang="zh-CN">查询处理与成本模型</span></span></a><a class="chapter-link" data-nav-item="" href="../../chapters/ch09.html"><span class="num">09</span><span><span class="nav-en" lang="en">Query optimisation and execution plans</span><span class="nav-zh" lang="zh-CN">查询优化与执行计划</span></span></a><a class="chapter-link" data-nav-item="" href="../../chapters/ch10.html"><span class="num">10</span><span><span class="nav-en" lang="en">Transactions, schedules and correctness</span><span class="nav-zh" lang="zh-CN">事务、调度与正确性</span></span></a><a class="chapter-link" data-nav-item="" href="../../chapters/ch11.html"><span class="num">11</span><span><span class="nav-en" lang="en">Locks, deadlocks and timestamp ordering</span><span class="nav-zh" lang="zh-CN">锁、死锁与时间戳排序</span></span></a><a class="chapter-link" data-nav-item="" href="../../chapters/ch12.html"><span class="num">12</span><span><span class="nav-en" lang="en">Logging, checkpoints and recovery</span><span class="nav-zh" lang="zh-CN">日志、检查点与恢复</span></span></a><a class="chapter-link" data-nav-item="" href="../../chapters/ch13.html"><span class="num">13</span><span><span class="nav-en" lang="en">Integrated practice and SQL extensions</span><span class="nav-zh" lang="zh-CN">综合实践与 SQL 扩展</span></span></a></nav><p class="search-empty" hidden="">没有匹配的专题 / No matching topics</p>
+<div class="sidebar-title special-sidebar-title">SPECIAL STUDY <span>专项学习</span></div><nav aria-label="A2 专项" class="special-sidebar-links"><a data-nav-item="" href="../../specials/a2/index.html">A2 从零开始 · 互动地图</a><a data-nav-item="" href="../../specials/a2/preparation.html">00 · 表与记录 / Start here</a><a data-nav-item="" href="../../specials/a2/q1.html">Q1 · 视图与递归 / Views</a><a data-nav-item="" href="../../specials/a2/q2.html">Q2 · 索引 / Indexes</a><a data-nav-item="" href="../../specials/a2/q3.html">Q3 · 查询计划 / Plans</a><a data-nav-item="" href="../../specials/a2/q4.html">Q4 · 快照与死锁 / Deadlock</a><a data-nav-item="" href="../../specials/a2/teach.html">向老师讲解 · 练习室</a></nav>
+<div class="sidebar-title assignment-sidebar-title">ASSIGNMENTS <span>作业复盘</span></div><nav class="assignment-sidebar-links"><a data-nav-item="" href="../../review/assignments.html#a1">A1 · Constraints / Triggers</a><a data-nav-item="" href="../../review/a2.html">A2 · FleetDB / PostgreSQL <span class="sidebar-dot" title="实测资料已收录"></span></a></nav>
+<div class="sidebar-title">PRACTICE <span>练习与工具</span></div><nav class="utility-links"><a href="../../chapters/practicals.html">Practical 操作指南</a><a href="../../chapters/classroom.html">课堂题与例题</a><a href="../../review/toolkit.html">速查与自测</a><a href="../../review/glossary.html">双语术语表</a><a href="../../complete.html">连续阅读与打印</a><a href="../../reports/sources.html">来源与发布说明</a></nav>
+<div class="sidebar-bottom"><div class="small-label">专题掌握进度</div><strong data-progress-text="">0 / 13</strong><div class="progress-track"><div data-progress-bar=""></div></div><p>读懂后，再闭卷解释一次。</p><div class="button-row"><button class="text-button" data-export-progress="">导出记录</button><label class="text-button" for="import-progress">导入记录</label><input accept="application/json" class="sr-only" data-import-progress="" id="import-progress" type="file"/></div></div></aside>
+<main id="main" tabindex="-1"><aside class="notice public-edition-note">公开学习版 · 互动、中文题意、代码解释与匿名 SQL 可用。课程原件、提交报告及私人档案保留在本地资料版。此站为个人学习笔记，含 AI 辅助内容，并非课程官方答案。</aside><article class="special-lesson"><div class="page-head"><p class="eyebrow">A2 SPECIAL / Q1 / TASK SUMMARY + LINE GUIDE</p><h1><span class="heading-main" lang="zh-CN">视图、窗口排名与递归</span><span class="heading-subtitle" lang="en">Views, window ranking and recursion</span></h1></div><nav aria-label="专项单元" class="special-module-nav"><a href="index.html">专项地图</a><a href="preparation.html">00 · 读懂数据与已有规则</a><a aria-current="page" href="q1.html">01 · 视图、窗口排名与递归</a><a href="q2.html">02 · 复合索引与表达式索引</a><a href="q3.html">03 · 反连接与六种扫描计划</a><a href="q4.html">04 · 双连接、快照与死锁</a></nav><div class="pair"><p lang="zh-CN">本单元包含 6 个小题、87 行解答代码。每题先读中文题意，再展开完整 SQL 与逐行解释，最后用真实输出验证自己的理解。</p><p lang="en">This unit contains 6 task parts and 87 answer-code lines. Read the task summary first, then the full SQL and per-line explanations, and finally compare with genuine output.</p></div><nav aria-label="本单元题目" class="part-jump-nav"><a href="#A2-1.1.1">Q1.1.1</a><a href="#A2-1.1.2">Q1.1.2</a><a href="#A2-1.2">Q1.2</a><a href="#A2-1.3.1">Q1.3.1</a><a href="#A2-1.3.2">Q1.3.2</a><a href="#A2-1.3.3">Q1.3.3</a></nav><div class="button-row assignment-actions"><button data-expand-answers="open">展开本单元解答</button><button data-expand-answers="close">收起解答</button><span class="a2-score">本页掌握 <b data-a2-progress=""></b></span></div><div class="study-method"><div class="pair"><p lang="zh-CN">先连接与筛选 → 聚合计数/金额 → 窗口排名或排序 → 筛出赢家/前十</p><p lang="en">Join and filter → aggregate → rank or sort → retain winners</p></div><div class="pair"><p lang="zh-CN">这是帮助理解查询的逻辑层次；物理计划仍可由优化器重排，不应把书写顺序当作真实执行顺序。</p><p lang="en">This describes logical reasoning, not a mandated physical execution order; the optimizer may choose other physical arrangements.</p></div></div><section class="interactive-first"><div class="section-line"><h2>先看数据怎样变化，再读窗口与递归<span>TRY FIRST · 再回到题意与每一行代码</span></h2><a href="teach.html">讲解练习室 →</a></div><p class="lab-route-intro">建议先点一次“下一步”，读懂发生的变化；再播放动画、修改参数。最后回答判断题，试着不用看代码解释。</p><section class="a2-lab" data-a2-lab="ranking" id="lab-ranking"><p>从分组到每组第一：互动演示正在准备。无需互动也可阅读本页题意和逐行讲解。</p><script type="application/json">{"number": "01A", "lines": [{"href": "q1.html#line-1-1-1-6", "part": "Q1.1.1", "number": 6, "code": "    FROM BOOKING_EVENTS e"}, {"href": "q1.html#line-1-1-1-10", "part": "Q1.1.1", "number": 10, "code": "    WHERE e.event_type = 'Collect'"}, {"href": "q1.html#line-1-1-1-11", "part": "Q1.1.1", "number": 11, "code": "    GROUP BY m.body_type, s.station_id, s.station_name"}, {"href": "q1.html#line-1-1-1-14", "part": "Q1.1.1", "number": 14, "code": "        PARTITION BY body_type"}], "note": "教学小数据 / 浏览器模拟；不是新数据库实测。题意、完整 SQL 与实测日志摘录在本页后面的逐题讲义中。"}</script><noscript>开启 JavaScript 可操作动画；本页静态讲义仍可阅读。</noscript></section><section class="a2-lab" data-a2-lab="recursion" id="lab-recursion"><p>根账号如何传到孩子：互动演示正在准备。无需互动也可阅读本页题意和逐行讲解。</p><script type="application/json">{"number": "01B", "lines": [{"href": "q1.html#line-1-2-3", "part": "Q1.2", "number": 3, "code": "WITH RECURSIVE account_tree AS ("}, {"href": "q1.html#line-1-2-6", "part": "Q1.2", "number": 6, "code": "    WHERE sponsor_id IS NULL"}, {"href": "q1.html#line-1-2-8", "part": "Q1.2", "number": 8, "code": "    SELECT child.member_id, parent.account_id"}, {"href": "q1.html#line-1-2-16", "part": "Q1.2", "number": 16, "code": "JOIN BOOKING_EVENTS e ON e.member_id = t.member_id"}], "note": "教学小数据 / 浏览器模拟；不是新数据库实测。题意、完整 SQL 与实测日志摘录在本页后面的逐题讲义中。"}</script><noscript>开启 JavaScript 可操作动画；本页静态讲义仍可阅读。</noscript></section><section class="a2-lab" data-a2-lab="materialized" id="lab-materialized"><p>旧快照为什么不自动变：互动演示正在准备。无需互动也可阅读本页题意和逐行讲解。</p><script type="application/json">{"number": "01C", "lines": [{"href": "q1.html#line-1-3-1-2", "part": "Q1.3.1", "number": 2, "code": "CREATE MATERIALIZED VIEW MV_ACCOUNT_LIABILITY AS"}, {"href": "q1.html#line-1-3-3-2", "part": "Q1.3.3", "number": 2, "code": "INSERT INTO BOOKING_EVENTS (member_id, vehicle_id, event_type, event_time, amount)"}, {"href": "q1.html#line-1-3-3-9", "part": "Q1.3.3", "number": 9, "code": "REFRESH MATERIALIZED VIEW MV_ACCOUNT_LIABILITY;"}], "note": "教学小数据 / 浏览器模拟；不是新数据库实测。题意、完整 SQL 与实测日志摘录在本页后面的逐题讲义中。"}</script><noscript>开启 JavaScript 可操作动画；本页静态讲义仍可阅读。</noscript></section></section><section id="a2-q1"><h2><span class="heading-main" lang="zh-CN">Q1 视图与物化视图</span><span class="heading-subtitle" lang="en">Views and materialised views · 4 marks</span></h2>
+<p class="next"><a href="../../chapters/ch03.html">回到课程专题：视图与物化视图 / Related course topic →</a></p>
+<div class="question a2-part" id="A2-1.1.1"><div class="a2-part-head"><h3>Q1.1.1</h3><span class="tag">TASK SUMMARY + LINE GUIDE</span></div>
+
+<div class="task-translation-label">中文题意 / Task in Chinese</div>
+<div class="pair"><p lang="zh-CN">（1分）每种body type选取Collect次数最多的单一站点，建视图输出类型、站名、次数并降序。</p><p lang="en">(1 marks) Create V_BUSIEST_BAYS: for each body type, one station with most collections; report type, station, count ordered descending.</p></div>
+<details><summary>解答、逐行代码与实测依据 / Solution, line guide and evidence</summary><div class="answer-body">
+<div class="pair"><p lang="zh-CN">先按 body_type 和 station 汇总 Collect 次数，再在每种 body type 内用 ROW_NUMBER 排名。只保留 rn = 1，恰好选出一个站点；station_id 是次数相同时的确定性规则。最后按获胜次数降序排列。</p><p lang="en">The first CTE counts Collect events for each body type and station. ROW_NUMBER partitions those counts by body type and picks the largest count; station_id resolves ties deterministically so exactly one station is returned per represented body type. The final ORDER BY puts the largest winner first.</p></div>
+<div class="pair"><p lang="zh-CN">BOOKING_EVENTS 没有事件发生站点字段，所以这里使用 VEHICLES 记录的站点。这是现有 schema 能支持的站点语义。</p><p lang="en">The schema records a station on VEHICLES, rather than on BOOKING_EVENTS. The station reported is therefore the vehicle's recorded station, which is the location available in the supplied schema.</p></div>
+<div class="code-block"><div class="code-label"><span>A2_1.1.1.sql</span><button class="copy-code" data-copy-code="">复制 SQL / Copy SQL</button></div><pre data-language="sql"><code>-- INFS7903 Assignment 2 | Public teaching edition
+CREATE VIEW V_BUSIEST_BAYS AS
+WITH collection_counts AS (
+    SELECT m.body_type, s.station_id, s.station_name,
+           COUNT(*) AS collections
+    FROM BOOKING_EVENTS e
+    JOIN VEHICLES v ON v.vehicle_id = e.vehicle_id
+    JOIN MODELS m ON m.model_code = v.model_code
+    JOIN STATIONS s ON s.station_id = v.station_id
+    WHERE e.event_type = 'Collect'
+    GROUP BY m.body_type, s.station_id, s.station_name
+), ranked_stations AS (
+    SELECT *, ROW_NUMBER() OVER (
+        PARTITION BY body_type
+        ORDER BY collections DESC, station_id
+    ) AS rn
+    FROM collection_counts
+)
+SELECT body_type, station_name, collections
+FROM ranked_stations
+WHERE rn = 1
+ORDER BY collections DESC, body_type;
+</code></pre><a class="text-button" download="" href="../../assignments/a2/sql/A2_1.1.1.sql">下载本题 SQL / Download SQL ↗</a></div>
+<details class="line-guide-panel" data-line-guide="1.1.1" open=""><summary>每一行在做什么 / Read every line · 22 行</summary><p class="line-guide-intro">行号与上方代码一致。先读这一行改变了什么，再把它放回整条查询；括号、别名和注释也有说明。</p><ol class="line-guide"><li data-line-number="1" id="line-1-1-1-1"><div class="line-code"><a aria-label="第 1 行" class="line-number" href="#line-1-1-1-1">01</a><code>-- INFS7903 Assignment 2 | Public teaching edition</code></div><div class="pair line-explanation"><p lang="zh-CN">文件说明注释：公开教学版本已移除提交者身份。-- 后直到行末不作为 SQL 执行，不会改变查询或会话；行号仍与下载文件一致。</p><p lang="en">Public-edition header with author identifiers removed. Text after -- is a non-executable comment; line numbers still match the downloadable file.</p></div></li><li data-line-number="2" id="line-1-1-1-2"><div class="line-code"><a aria-label="第 2 行" class="line-number" href="#line-1-1-1-2">02</a><code>CREATE VIEW V_BUSIEST_BAYS AS</code></div><div class="pair line-explanation"><p lang="zh-CN">CREATE VIEW 建立名为 V_BUSIEST_BAYS 的普通视图，AS 后面的 SELECT 是它保存的查询定义。普通视图不是结果快照，读取时由数据库规划并计算这条查询。</p><p lang="en">CREATE VIEW names the ordinary view V_BUSIEST_BAYS; AS introduces its stored query definition. It stores a query rather than a snapshot of result rows.</p></div></li><li data-line-number="3" id="line-1-1-1-3"><div class="line-code"><a aria-label="第 3 行" class="line-number" href="#line-1-1-1-3">03</a><code>WITH collection_counts AS (</code></div><div class="pair line-explanation"><p lang="zh-CN">WITH 定义只在当前查询内可见的 CTE collection_counts。括号内先解决“每种车型在每站取过几次车”，把计数和后面的排名分开；CTE 不等于永久表，也不保证一定物化。</p><p lang="en">WITH introduces the query-local CTE collection_counts. It separates counting from ranking; a CTE is neither a permanent table nor necessarily materialized.</p></div></li><li data-line-number="4" id="line-1-1-1-4"><div class="line-code"><a aria-label="第 4 行" class="line-number" href="#line-1-1-1-4">04</a><code>    SELECT m.body_type, s.station_id, s.station_name,</code></div><div class="pair line-explanation"><p lang="zh-CN">取出车型类别，以及站点 ID 和名称。m、s 是后面 JOIN 定义的别名；保留 station_id 能区分同名站点，也能在排名次数相同时确定顺序。</p><p lang="en">Select the body type and station identifier/name. The aliases m and s are defined by later joins; station_id distinguishes equal names and provides a deterministic tie-breaker.</p></div></li><li data-line-number="5" id="line-1-1-1-5"><div class="line-code"><a aria-label="第 5 行" class="line-number" href="#line-1-1-1-5">05</a><code>           COUNT(*) AS collections</code></div><div class="pair line-explanation"><p lang="zh-CN">COUNT(*) 数分组中的事件行，并把结果列命名为 collections。后面 WHERE 只保留 Collect，连接目标的主键又是唯一的，因此这里数的是取车事件次数，不是车辆数。</p><p lang="en">COUNT(*) counts event rows in each group and names the column collections. The Collect filter and joins to unique keys make this a count of collections, not distinct vehicles.</p></div></li><li data-line-number="6" id="line-1-1-1-6"><div class="line-code"><a aria-label="第 6 行" class="line-number" href="#line-1-1-1-6">06</a><code>    FROM BOOKING_EVENTS e</code></div><div class="pair line-explanation"><p lang="zh-CN">从事件日志 BOOKING_EVENTS 开始，给它别名 e。车可以多次被取用，所以不能只从 VEHICLES 数车辆来替代事件次数。</p><p lang="en">Read BOOKING_EVENTS as e. A vehicle may be collected repeatedly, so counting fleet vehicles cannot replace counting events.</p></div></li><li data-line-number="7" id="line-1-1-1-7"><div class="line-code"><a aria-label="第 7 行" class="line-number" href="#line-1-1-1-7">07</a><code>    JOIN VEHICLES v ON v.vehicle_id = e.vehicle_id</code></div><div class="pair line-explanation"><p lang="zh-CN">按 vehicle_id 把每条事件接到它对应的车辆 v。车辆主键唯一，因而一条事件最多接到一辆车；这一步取得车辆的 model_code 与 station_id。</p><p lang="en">Join each event to its vehicle v through vehicle_id. The unique vehicle key prevents multiplication and exposes the model and recorded station.</p></div></li><li data-line-number="8" id="line-1-1-1-8"><div class="line-code"><a aria-label="第 8 行" class="line-number" href="#line-1-1-1-8">08</a><code>    JOIN MODELS m ON m.model_code = v.model_code</code></div><div class="pair line-explanation"><p lang="zh-CN">把车辆的 model_code 接到 MODELS 主键，给车型表别名 m，从而取得 body_type。事件日志本身没有车型类别，必须经过车辆再找到车型。</p><p lang="en">Join the vehicle model_code to MODELS as m to obtain body_type; the event log does not store this attribute directly.</p></div></li><li data-line-number="9" id="line-1-1-1-9"><div class="line-code"><a aria-label="第 9 行" class="line-number" href="#line-1-1-1-9">09</a><code>    JOIN STATIONS s ON s.station_id = v.station_id</code></div><div class="pair line-explanation"><p lang="zh-CN">把车辆记录的 station_id 接到 STATIONS，给站点表别名 s，取得站名。原 schema 没有事件发生地点字段，所以这里使用车辆所记录的站点。</p><p lang="en">Join the vehicle’s station_id to STATIONS as s for its name. This uses the vehicle’s recorded station because events have no location column.</p></div></li><li data-line-number="10" id="line-1-1-1-10"><div class="line-code"><a aria-label="第 10 行" class="line-number" href="#line-1-1-1-10">10</a><code>    WHERE e.event_type = 'Collect'</code></div><div class="pair line-explanation"><p lang="zh-CN">只保留事件类型等于字符串 Collect 的行；单引号表示字符串，e.event_type 是列。Reserve、Return 等其他事件不进入后续计数。</p><p lang="en">Keep only rows whose event_type equals the string Collect. Single quotes delimit a string literal; other event types are excluded before counting.</p></div></li><li data-line-number="11" id="line-1-1-1-11"><div class="line-code"><a aria-label="第 11 行" class="line-number" href="#line-1-1-1-11">11</a><code>    GROUP BY m.body_type, s.station_id, s.station_name</code></div><div class="pair line-explanation"><p lang="zh-CN">按“车型类别＋站点”分组，再计算每组 COUNT(*)。站点 ID 和名称一起写清输出语义；名字相同但 ID 不同的站点不会被合并。</p><p lang="en">Group by body type and station, then count each group. Including the station identifier keeps distinct stations separate even if names match.</p></div></li><li data-line-number="12" id="line-1-1-1-12"><div class="line-code"><a aria-label="第 12 行" class="line-number" href="#line-1-1-1-12">12</a><code>), ranked_stations AS (</code></div><div class="pair line-explanation"><p lang="zh-CN">前面的右括号结束 collection_counts；逗号开启第二个 CTE ranked_stations。两个 CTE 属于同一条 WITH 查询，不是两条独立执行的 SQL。</p><p lang="en">Close collection_counts and introduce ranked_stations after the comma. Both CTEs belong to one WITH query, not separate SQL commands.</p></div></li><li data-line-number="13" id="line-1-1-1-13"><div class="line-code"><a aria-label="第 13 行" class="line-number" href="#line-1-1-1-13">13</a><code>    SELECT *, ROW_NUMBER() OVER (</code></div><div class="pair line-explanation"><p lang="zh-CN">SELECT * 保留上一层的所有列；ROW_NUMBER() OVER 开始添加一个窗口排名列。窗口函数不会把这些计数行再次合并，而是为每行增加序号。</p><p lang="en">Retain all CTE columns and add a ROW_NUMBER window result. Window processing assigns a number to each row without collapsing rows into new groups.</p></div></li><li data-line-number="14" id="line-1-1-1-14"><div class="line-code"><a aria-label="第 14 行" class="line-number" href="#line-1-1-1-14">14</a><code>        PARTITION BY body_type</code></div><div class="pair line-explanation"><p lang="zh-CN">PARTITION BY body_type 让每种车型分别从 1 开始排名。如果省略这一行，就会把所有车型混在同一个总排名里。</p><p lang="en">PARTITION BY body_type restarts numbering for each body type. Without it, all body types would compete in a single global ranking.</p></div></li><li data-line-number="15" id="line-1-1-1-15"><div class="line-code"><a aria-label="第 15 行" class="line-number" href="#line-1-1-1-15">15</a><code>        ORDER BY collections DESC, station_id</code></div><div class="pair line-explanation"><p lang="zh-CN">每种车型内部按 collections 降序，次数最多的排前面；相同次数时 station_id 默认升序。这个额外规则使 ROW_NUMBER 恰好选出一个确定的站点，而 RANK 可能产生多个并列第一。</p><p lang="en">Within each body type, sort counts descending and station_id ascending for ties. The extra key gives ROW_NUMBER one deterministic winner; RANK could retain tied winners.</p></div></li><li data-line-number="16" id="line-1-1-1-16"><div class="line-code"><a aria-label="第 16 行" class="line-number" href="#line-1-1-1-16">16</a><code>    ) AS rn</code></div><div class="pair line-explanation"><p lang="zh-CN">关闭 OVER 的窗口定义，并把排名结果命名为 rn。rn 是这一层新增的列，下一层才能用 WHERE rn = 1 过滤，不能直接在同层 WHERE 中引用窗口结果。</p><p lang="en">Close OVER and name the window output rn. An outer query can filter rn; the same SELECT level’s WHERE cannot directly filter its window result.</p></div></li><li data-line-number="17" id="line-1-1-1-17"><div class="line-code"><a aria-label="第 17 行" class="line-number" href="#line-1-1-1-17">17</a><code>    FROM collection_counts</code></div><div class="pair line-explanation"><p lang="zh-CN">第二个 CTE 的输入是刚才已经计数的 collection_counts。排名作用于“每站的计数行”，不是直接对 59,539 条原始 Collect 事件编号。</p><p lang="en">Rank the already aggregated collection_counts rows, rather than numbering all raw Collect events.</p></div></li><li data-line-number="18" id="line-1-1-1-18"><div class="line-code"><a aria-label="第 18 行" class="line-number" href="#line-1-1-1-18">18</a><code>)</code></div><div class="pair line-explanation"><p lang="zh-CN">结束 ranked_stations 的查询定义；下面的 SELECT 是整条 WITH 查询的最终输出。括号只划定语法范围，不是事务结束。</p><p lang="en">Close ranked_stations. The following SELECT is the final WITH-query output; this parenthesis is a scope boundary, not a transaction boundary.</p></div></li><li data-line-number="19" id="line-1-1-1-19"><div class="line-code"><a aria-label="第 19 行" class="line-number" href="#line-1-1-1-19">19</a><code>SELECT body_type, station_name, collections</code></div><div class="pair line-explanation"><p lang="zh-CN">最终只输出题目要求的 body_type、station_name 和 collections。station_id 与 rn 是实现排名所需的辅助列，不暴露为视图的结果列。</p><p lang="en">Project only the required body type, station name and count. station_id and rn are internal ranking helpers, not final view columns.</p></div></li><li data-line-number="20" id="line-1-1-1-20"><div class="line-code"><a aria-label="第 20 行" class="line-number" href="#line-1-1-1-20">20</a><code>FROM ranked_stations</code></div><div class="pair line-explanation"><p lang="zh-CN">从含有每组序号的 ranked_stations 读取。此时每一行仍代表一个车型与站点组合，但已经知道它在本车型中的排名。</p><p lang="en">Read ranked_stations, where each body-type/station row now has its within-type rank.</p></div></li><li data-line-number="21" id="line-1-1-1-21"><div class="line-code"><a aria-label="第 21 行" class="line-number" href="#line-1-1-1-21">21</a><code>WHERE rn = 1</code></div><div class="pair line-explanation"><p lang="zh-CN">每种车型仅保留 rn 为 1 的行，所以结果是一种车型一个站点。这里是每组取第一，不是全表 LIMIT 1；本数据返回 6 种车型。</p><p lang="en">Keep rank one within each body type. This is one winner per group, not LIMIT 1 over the whole table; the dataset yields six body types.</p></div></li><li data-line-number="22" id="line-1-1-1-22"><div class="line-code"><a aria-label="第 22 行" class="line-number" href="#line-1-1-1-22">22</a><code>ORDER BY collections DESC, body_type;</code></div><div class="pair line-explanation"><p lang="zh-CN">把六个获胜站点按取车次数从多到少排列；次数相同再按 body_type 排序。分号结束 CREATE VIEW 整条语句，后续查询该视图即可执行这个定义。</p><p lang="en">Sort the six winners by count descending and then body type. The semicolon ends CREATE VIEW; subsequent reads use this definition.</p></div></li></ol></details>
+<details class="evidence-details"><summary>实际输出 / Captured output · 1.1.1_1</summary><pre class="evidence-output"><code>CREATE VIEW V_BUSIEST_BAYS AS
+WITH collection_counts AS (
+    SELECT m.body_type, s.station_id, s.station_name,
+           COUNT(*) AS collections
+    FROM BOOKING_EVENTS e
+    JOIN VEHICLES v ON v.vehicle_id = e.vehicle_id
+    JOIN MODELS m ON m.model_code = v.model_code
+    JOIN STATIONS s ON s.station_id = v.station_id
+    WHERE e.event_type = 'Collect'
+    GROUP BY m.body_type, s.station_id, s.station_name
+), ranked_stations AS (
+    SELECT *, ROW_NUMBER() OVER (
+        PARTITION BY body_type
+        ORDER BY collections DESC, station_id
+    ) AS rn
+    FROM collection_counts
+)
+SELECT body_type, station_name, collections
+FROM ranked_stations
+WHERE rn = 1
+ORDER BY collections DESC, body_type;
+CREATE VIEW
+</code></pre><div class="part-links"><span class="local-material-reference">原始日志 / Raw transcript ↗（原资料留在本地版）</span><span class="local-material-reference">输出截图 / Output screenshots ↗（原资料留在本地版）</span></div></details>
+</div></details><label class="mastery-control"><input data-mastered="A2-1.1.1" type="checkbox"/><span lang="zh-CN">我能解释并独立复现这题</span><span lang="en">I can explain and reproduce this part.</span></label></div>
+<div class="question a2-part" id="A2-1.1.2"><div class="a2-part-head"><h3>Q1.1.2</h3><span class="tag">TASK SUMMARY + LINE GUIDE</span></div>
+
+<div class="task-translation-label">中文题意 / Task in Chinese</div>
+<div class="pair"><p lang="zh-CN">（0.5分）查询视图并报告结果、完整计划，解释耗时、成本及行数。</p><p lang="en">(0.5 marks) Query V_BUSIEST_BAYS and report/explain results and plan using times, costs, row counts.</p></div>
+<details><summary>解答、逐行代码与实测依据 / Solution, line guide and evidence</summary><div class="answer-body">
+<div class="pair"><p lang="zh-CN">结果是 6 行：Sedan 973、SUV 838、Hatchback 794、People Mover 510、Van 384、Ute 333。顶层估计 2 行，实际 6 行；cost 为 4782.24..4782.25，实测执行 31.959 ms。</p><p lang="en">The view returns six rows. Sedan at Carindale Park leads with 973 collections, followed by SUV 838, Hatchback 794, People Mover 510, Van 384 and Ute 333. The top node estimates 2 rows but returns 6; its cost is 4782.24..4782.25 and execution takes 31.959 ms.</p></div>
+<div class="pair"><p lang="zh-CN">Parallel Seq Scan 过滤 Collect，29,769.5 行/loop × 2 = 59,539 次取车。Hash Join 补齐车型和站点，聚合为 279 个组，WindowAgg 挑每组第一，最后排序 6 个赢家。结果很少并不代表底层扫描工作很少。</p><p lang="en">A Parallel Seq Scan filters BOOKING_EVENTS to Collect events. Its 29,769.5 actual rows per loop across two loops represent 59,539 collections in total. Hash joins attach vehicle, model and station attributes. Partial aggregation and Finalize GroupAggregate reduce these events to 279 body-type/station groups; incremental sorting and WindowAgg select one winner per body type, and the final sort orders the six winners. The small final result does not avoid processing the underlying event log.</p></div>
+<div class="code-block"><div class="code-label"><span>A2_1.1.2.sql</span><button class="copy-code" data-copy-code="">复制 SQL / Copy SQL</button></div><pre data-language="sql"><code>-- INFS7903 Assignment 2 | Public teaching edition
+SELECT * FROM V_BUSIEST_BAYS;
+EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM V_BUSIEST_BAYS;
+</code></pre><a class="text-button" download="" href="../../assignments/a2/sql/A2_1.1.2.sql">下载本题 SQL / Download SQL ↗</a></div>
+<details class="line-guide-panel" data-line-guide="1.1.2" open=""><summary>每一行在做什么 / Read every line · 3 行</summary><p class="line-guide-intro">行号与上方代码一致。先读这一行改变了什么，再把它放回整条查询；括号、别名和注释也有说明。</p><ol class="line-guide"><li data-line-number="1" id="line-1-1-2-1"><div class="line-code"><a aria-label="第 1 行" class="line-number" href="#line-1-1-2-1">01</a><code>-- INFS7903 Assignment 2 | Public teaching edition</code></div><div class="pair line-explanation"><p lang="zh-CN">文件说明注释：公开教学版本已移除提交者身份。-- 后直到行末不作为 SQL 执行，不会改变查询或会话；行号仍与下载文件一致。</p><p lang="en">Public-edition header with author identifiers removed. Text after -- is a non-executable comment; line numbers still match the downloadable file.</p></div></li><li data-line-number="2" id="line-1-1-2-2"><div class="line-code"><a aria-label="第 2 行" class="line-number" href="#line-1-1-2-2">02</a><code>SELECT * FROM V_BUSIEST_BAYS;</code></div><div class="pair line-explanation"><p lang="zh-CN">读取 V_BUSIEST_BAYS 的全部结果列。这个 SELECT 才用于展示结果；下一条 EXPLAIN ANALYZE 另用于研究执行方式，两次运行的缓存和计时可能不同。</p><p lang="en">Read all result columns from V_BUSIEST_BAYS. This SELECT displays tuples; the separate EXPLAIN ANALYZE studies execution, and the two runs may see different cache state and timing.</p></div></li><li data-line-number="3" id="line-1-1-2-3"><div class="line-code"><a aria-label="第 3 行" class="line-number" href="#line-1-1-2-3">03</a><code>EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM V_BUSIEST_BAYS;</code></div><div class="pair line-explanation"><p lang="zh-CN">EXPLAIN 显示“V_BUSIEST_BAYS”的物理执行计划；ANALYZE 会真正运行该查询并记录实际耗时、行数与 loops，BUFFERS 增加缓冲页访问统计。这里不逐行打印普通查询结果；cost 是估计单位，不能直接当毫秒，也不能把父子节点时间简单相加。</p><p lang="en">EXPLAIN shows the physical plan for V_BUSIEST_BAYS. ANALYZE really executes it and records actual timing, rows and loops; BUFFERS adds page-access statistics. It does not return ordinary result tuples, cost is not milliseconds, and parent/child timings must not simply be summed.</p></div></li></ol></details>
+<details class="evidence-details"><summary>实际输出 / Captured output · 1.1.2_1</summary><pre class="evidence-output"><code>SELECT * FROM V_BUSIEST_BAYS;
+  body_type   |  station_name  | collections 
+--------------+----------------+-------------
+ Sedan        | Carindale Park |         973
+ SUV          | Chermside Park |         838
+ Hatchback    | Chermside Park |         794
+ People Mover | St Lucia Hub   |         510
+ Van          | Chermside Park |         384
+ Ute          | Carindale Park |         333
+(6 rows)
+
+</code></pre><div class="part-links"><span class="local-material-reference">原始日志 / Raw transcript ↗（原资料留在本地版）</span><span class="local-material-reference">输出截图 / Output screenshots ↗（原资料留在本地版）</span></div></details>
+<details class="evidence-details"><summary>完整执行计划 / Full query plan · 1.1.2_2</summary><pre class="evidence-output"><code>EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM V_BUSIEST_BAYS;
+                                                                                               QUERY PLAN                                                                                                
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=4782.24..4782.25 rows=2 width=32) (actual time=28.169..31.781 rows=6.00 loops=1)
+   Sort Key: ranked_stations.collections DESC, ranked_stations.body_type
+   Sort Method: quicksort  Memory: 25kB
+   Buffers: shared hit=1665
+   -&gt;  Subquery Scan on ranked_stations  (cost=4682.66..4782.23 rows=2 width=32) (actual time=27.988..31.772 rows=6.00 loops=1)
+         Filter: (ranked_stations.rn = 1)
+         Buffers: shared hit=1662
+         -&gt;  WindowAgg  (cost=4682.66..4777.73 rows=360 width=47) (actual time=27.986..31.770 rows=6.00 loops=1)
+               Window: w1 AS (PARTITION BY collection_counts.body_type ORDER BY collection_counts.collections, collection_counts.station_id ROWS UNBOUNDED PRECEDING)
+               Run Condition: (row_number() OVER w1 &lt;= 1)
+               Storage: Memory  Maximum Storage: 17kB
+               Buffers: shared hit=1662
+               -&gt;  Incremental Sort  (cost=4682.39..4770.53 rows=360 width=39) (actual time=27.975..31.746 rows=279.00 loops=1)
+                     Sort Key: collection_counts.body_type, collection_counts.collections DESC, collection_counts.station_id
+                     Presorted Key: collection_counts.body_type
+                     Full-sort Groups: 6  Sort Method: quicksort  Average Memory: 28kB  Peak Memory: 28kB
+                     Buffers: shared hit=1662
+                     -&gt;  Subquery Scan on collection_counts  (cost=4681.99..4759.93 rows=360 width=39) (actual time=27.937..31.667 rows=279.00 loops=1)
+                           Buffers: shared hit=1662
+                           -&gt;  Finalize GroupAggregate  (cost=4681.99..4759.93 rows=360 width=39) (actual time=27.935..31.652 rows=279.00 loops=1)
+                                 Group Key: m.body_type, s.station_id
+                                 Buffers: shared hit=1662
+                                 -&gt;  Gather Merge  (cost=4681.99..4751.74 rows=612 width=39) (actual time=27.930..31.597 rows=558.00 loops=1)
+                                       Workers Planned: 1
+                                       Workers Launched: 1
+                                       Buffers: shared hit=1662
+                                       -&gt;  Sort  (cost=3681.98..3682.88 rows=360 width=39) (actual time=18.952..18.961 rows=279.00 loops=2)
+                                             Sort Key: m.body_type, s.station_id
+                                             Sort Method: quicksort  Memory: 41kB
+                                             Buffers: shared hit=1662
+                                             Worker 0:  Sort Method: quicksort  Memory: 41kB
+                                             -&gt;  Partial HashAggregate  (cost=3663.10..3666.70 rows=360 width=39) (actual time=18.822..18.843 rows=279.00 loops=2)
+                                                   Group Key: m.body_type, s.station_id
+                                                   Batches: 1  Memory Usage: 72kB
+                                                   Buffers: shared hit=1654
+                                                   Worker 0:  Batches: 1  Memory Usage: 72kB
+                                                   -&gt;  Hash Join  (cost=32.62..3400.27 rows=35044 width=31) (actual time=0.697..15.367 rows=29769.50 loops=2)
+                                                         Hash Cond: ((v.station_id)::text = (s.station_id)::text)
+                                                         Buffers: shared hit=1654
+                                                         -&gt;  Hash Join  (cost=30.27..3299.43 rows=35044 width=14) (actual time=0.550..12.549 rows=29769.50 loops=2)
+                                                               Hash Cond: ((v.model_code)::text = (m.model_code)::text)
+                                                               Buffers: shared hit=1652
+                                                               -&gt;  Hash Join  (cost=27.25..3200.09 rows=35044 width=15) (actual time=0.368..9.712 rows=29769.50 loops=2)
+                                                                     Hash Cond: ((e.vehicle_id)::text = (v.vehicle_id)::text)
+                                                                     Buffers: shared hit=1650
+                                                                     -&gt;  Parallel Seq Scan on booking_events e  (cost=0.00..3080.41 rows=35044 width=9) (actual time=0.008..6.405 rows=29769.50 loops=2)
+                                                                           Filter: ((event_type)::text = 'Collect'::text)
+                                                                           Rows Removed by Filter: 68450
+                                                                           Buffers: shared hit=1636
+                                                                     -&gt;  Hash  (cost=16.00..16.00 rows=900 width=24) (actual time=0.354..0.354 rows=900.00 loops=2)
+                                                                           Buckets: 1024  Batches: 1  Memory Usage: 58kB
+                                                                           Buffers: shared hit=14
+                                                                           -&gt;  Seq Scan on vehicles v  (cost=0.00..16.00 rows=900 width=24) (actual time=0.229..0.280 rows=900.00 loops=2)
+                                                                                 Buffers: shared hit=14
+                                                               -&gt;  Hash  (cost=1.90..1.90 rows=90 width=15) (actual time=0.177..0.178 rows=90.00 loops=2)
+                                                                     Buckets: 1024  Batches: 1  Memory Usage: 13kB
+                                                                     Buffers: shared hit=2
+                                                                     -&gt;  Seq Scan on models m  (cost=0.00..1.90 rows=90 width=15) (actual time=0.164..0.168 rows=90.00 loops=2)
+                                                                           Buffers: shared hit=2
+                                                         -&gt;  Hash  (cost=1.60..1.60 rows=60 width=24) (actual time=0.143..0.144 rows=60.00 loops=2)
+                                                               Buckets: 1024  Batches: 1  Memory Usage: 12kB
+                                                               Buffers: shared hit=2
+                                                               -&gt;  Seq Scan on stations s  (cost=0.00..1.60 rows=60 width=24) (actual time=0.130..0.133 rows=60.00 loops=2)
+                                                                     Buffers: shared hit=2
+ Planning:
+   Buffers: shared hit=335
+ Planning Time: 3.490 ms
+ Execution Time: 31.959 ms
+(68 rows)
+
+</code></pre><div class="part-links"><span class="local-material-reference">原始日志 / Raw transcript ↗（原资料留在本地版）</span><span class="local-material-reference">输出截图 / Output screenshots ↗（原资料留在本地版）</span></div></details>
+</div></details><label class="mastery-control"><input data-mastered="A2-1.1.2" type="checkbox"/><span lang="zh-CN">我能解释并独立复现这题</span><span lang="en">I can explain and reproduce this part.</span></label></div>
+<div class="question a2-part" id="A2-1.2"><div class="a2-part-head"><h3>Q1.2</h3><span class="tag">TASK SUMMARY + LINE GUIDE</span></div>
+
+<div class="task-translation-label">中文题意 / Task in Chinese</div>
+<div class="pair"><p lang="zh-CN">（1.5分）建视图列2026年1月1日至6月30日费用最高的十个最终根账户及其总金额。</p><p lang="en">(1.5 marks) Create V_ACCOUNT_LIABILITY with the ten root accounts liable for the largest charges dated 1 Jan–30 Jun 2026 inclusive.</p></div>
+<details><summary>解答、逐行代码与实测依据 / Solution, line guide and evidence</summary><div class="answer-body">
+<div class="pair"><p lang="zh-CN">递归基础层把无 sponsor 的账号映射到自己；递归层让 child 继承 parent 的根账号。每名成员只映射到最终 root，因此每条收费事件只计一次，不在中间 sponsor 上重复累加。</p><p lang="en">The recursive seed maps each unsponsored account to itself. Each recursive step maps a sponsored child to the same root account as its parent, so every member in the supplied sponsorship forest maps to exactly one ultimately liable account. Joining charges to this mapping bills personal charges and every level of sponsored charges to the root, without counting an event at several intermediate accounts.</p></div>
+<div class="pair"><p lang="zh-CN">只计 Return 和 Incident 的收费。日期范围为 2026-01-01（含）到 2026-07-01（不含），覆盖 6 月 30 日全天；按金额降序取前 10。另一套独立的向上递归校验得到同样结果。</p><p lang="en">Only Return fares and Incident damage charges are included. The half-open timestamp range from 2026-01-01 up to, but excluding, 2026-07-01 includes all of 30 June. Totals are sorted descending, with member_id as a deterministic tie-breaker, and limited to ten accounts. The result is shown in Q1.3 Query A. An independent upward traversal produced the same ten rows.</p></div>
+<div class="code-block"><div class="code-label"><span>A2_1.2.sql</span><button class="copy-code" data-copy-code="">复制 SQL / Copy SQL</button></div><pre data-language="sql"><code>-- INFS7903 Assignment 2 | Public teaching edition
+CREATE VIEW V_ACCOUNT_LIABILITY AS
+WITH RECURSIVE account_tree AS (
+    SELECT member_id, member_id AS account_id
+    FROM MEMBERS
+    WHERE sponsor_id IS NULL
+    UNION ALL
+    SELECT child.member_id, parent.account_id
+    FROM MEMBERS child
+    JOIN account_tree parent ON child.sponsor_id = parent.member_id
+)
+SELECT root.member_id, root.member_name,
+       SUM(e.amount) AS total_amount
+FROM account_tree t
+JOIN MEMBERS root ON root.member_id = t.account_id
+JOIN BOOKING_EVENTS e ON e.member_id = t.member_id
+WHERE e.event_type IN ('Return', 'Incident')
+  AND e.event_time &gt;= TIMESTAMP '2026-01-01'
+  AND e.event_time &lt;  TIMESTAMP '2026-07-01'
+GROUP BY root.member_id, root.member_name
+ORDER BY total_amount DESC, root.member_id
+LIMIT 10;
+</code></pre><a class="text-button" download="" href="../../assignments/a2/sql/A2_1.2.sql">下载本题 SQL / Download SQL ↗</a></div>
+<details class="line-guide-panel" data-line-guide="1.2" open=""><summary>每一行在做什么 / Read every line · 22 行</summary><p class="line-guide-intro">行号与上方代码一致。先读这一行改变了什么，再把它放回整条查询；括号、别名和注释也有说明。</p><ol class="line-guide"><li data-line-number="1" id="line-1-2-1"><div class="line-code"><a aria-label="第 1 行" class="line-number" href="#line-1-2-1">01</a><code>-- INFS7903 Assignment 2 | Public teaching edition</code></div><div class="pair line-explanation"><p lang="zh-CN">文件说明注释：公开教学版本已移除提交者身份。-- 后直到行末不作为 SQL 执行，不会改变查询或会话；行号仍与下载文件一致。</p><p lang="en">Public-edition header with author identifiers removed. Text after -- is a non-executable comment; line numbers still match the downloadable file.</p></div></li><li data-line-number="2" id="line-1-2-2"><div class="line-code"><a aria-label="第 2 行" class="line-number" href="#line-1-2-2">02</a><code>CREATE VIEW V_ACCOUNT_LIABILITY AS</code></div><div class="pair line-explanation"><p lang="zh-CN">创建普通视图 V_ACCOUNT_LIABILITY，结果列由后面的 SELECT 决定。它保存“最终由谁付款”的查询定义，不把当前前十名永久冻结。</p><p lang="en">Create V_ACCOUNT_LIABILITY as an ordinary view. Its SELECT determines the columns and recalculates ultimately liable accounts when read.</p></div></li><li data-line-number="3" id="line-1-2-3"><div class="line-code"><a aria-label="第 3 行" class="line-number" href="#line-1-2-3">03</a><code>WITH RECURSIVE account_tree AS (</code></div><div class="pair line-explanation"><p lang="zh-CN">WITH RECURSIVE 允许 account_tree 在后半段引用自己的当前递归结果。这里从无赞助人的根账号往下找孩子，把每个成员映射到最终付款账号。</p><p lang="en">WITH RECURSIVE lets account_tree refer to its current recursive rows. The traversal starts at unsponsored roots and propagates the ultimate payer down to descendants.</p></div></li><li data-line-number="4" id="line-1-2-4"><div class="line-code"><a aria-label="第 4 行" class="line-number" href="#line-1-2-4">04</a><code>    SELECT member_id, member_id AS account_id</code></div><div class="pair line-explanation"><p lang="zh-CN">基础层把根账号的 member_id 同时输出为 member_id 和 account_id。前者是“当前成员”，后者是“一直保留的最终付款根”，例如根 13943 对应 (13943,13943)。</p><p lang="en">The seed emits a root’s member_id twice: the current member and its ultimate account_id. Root 13943 therefore begins as (13943,13943).</p></div></li><li data-line-number="5" id="line-1-2-5"><div class="line-code"><a aria-label="第 5 行" class="line-number" href="#line-1-2-5">05</a><code>    FROM MEMBERS</code></div><div class="pair line-explanation"><p lang="zh-CN">基础层从 MEMBERS 成员表读取，尚未访问收费日志。先建立成员到根的对应关系，再连接收费，能清楚区分层级关系与金额汇总。</p><p lang="en">Read MEMBERS for the seed, before joining any charges. This separates hierarchy resolution from monetary aggregation.</p></div></li><li data-line-number="6" id="line-1-2-6"><div class="line-code"><a aria-label="第 6 行" class="line-number" href="#line-1-2-6">06</a><code>    WHERE sponsor_id IS NULL</code></div><div class="pair line-explanation"><p lang="zh-CN">sponsor_id 为 NULL 的成员没有上级，需要自己付款，因此是根节点。判断 NULL 必须用 IS NULL，写 = NULL 不会得到期望的真值。</p><p lang="en">Members with sponsor_id IS NULL are self-paying roots. IS NULL is required because ordinary equality with NULL does not test for nullness.</p></div></li><li data-line-number="7" id="line-1-2-7"><div class="line-code"><a aria-label="第 7 行" class="line-number" href="#line-1-2-7">07</a><code>    UNION ALL</code></div><div class="pair line-explanation"><p lang="zh-CN">UNION ALL 合并基础层和后面一轮轮找出的孩子，不做去重。对给定的无环、每人至多一个 sponsor 的层级，每个成员只有一条根路径；这段代码本身不是通用的环检测器。</p><p lang="en">UNION ALL appends recursive descendants without deduplication. In the supplied acyclic single-sponsor hierarchy, each member has one root path; this query is not a general cycle detector.</p></div></li><li data-line-number="8" id="line-1-2-8"><div class="line-code"><a aria-label="第 8 行" class="line-number" href="#line-1-2-8">08</a><code>    SELECT child.member_id, parent.account_id</code></div><div class="pair line-explanation"><p lang="zh-CN">每次输出孩子自己的 member_id，但 account_id 仍复制父行携带的根账号。不能在此改成 parent.member_id，否则深层成员会被错误归到直接父母。</p><p lang="en">Emit the child’s own member_id but retain the parent row’s ultimate account_id. Using parent.member_id instead would incorrectly bill deeper descendants to an intermediate sponsor.</p></div></li><li data-line-number="9" id="line-1-2-9"><div class="line-code"><a aria-label="第 9 行" class="line-number" href="#line-1-2-9">09</a><code>    FROM MEMBERS child</code></div><div class="pair line-explanation"><p lang="zh-CN">把成员表中的候选孩子命名为 child。它们可能属于任意一层；是否接上当前递归结果，由下一行的连接条件决定。</p><p lang="en">Read candidate child members from MEMBERS. The next join decides which ones descend from the current recursive frontier.</p></div></li><li data-line-number="10" id="line-1-2-10"><div class="line-code"><a aria-label="第 10 行" class="line-number" href="#line-1-2-10">10</a><code>    JOIN account_tree parent ON child.sponsor_id = parent.member_id</code></div><div class="pair line-explanation"><p lang="zh-CN">child.sponsor_id 等于当前 parent.member_id 时，说明这个成员直接受该 parent 赞助；递归继续往下扩展。parent 是 CTE 的递归行别名，不一定是最终根。</p><p lang="en">Match a child’s sponsor_id to a current parent member_id and extend the traversal. parent names a recursive row, which may itself be an intermediate account.</p></div></li><li data-line-number="11" id="line-1-2-11"><div class="line-code"><a aria-label="第 11 行" class="line-number" href="#line-1-2-11">11</a><code>)</code></div><div class="pair line-explanation"><p lang="zh-CN">结束递归 CTE。此时给定数据中的 24,000 名成员各有一个 account_id；后面的聚合使用这份映射，递归本身不负责金额相加。</p><p lang="en">Close the recursive CTE. The supplied data maps all 24,000 members to account_id; monetary aggregation happens afterward.</p></div></li><li data-line-number="12" id="line-1-2-12"><div class="line-code"><a aria-label="第 12 行" class="line-number" href="#line-1-2-12">12</a><code>SELECT root.member_id, root.member_name,</code></div><div class="pair line-explanation"><p lang="zh-CN">输出根账号的 ID 和姓名，而不是产生费用的下属姓名。root 是下一步连接得到的最终付款成员记录。</p><p lang="en">Select the root account’s identifier and name, not the descendant who incurred the charge. root will identify that ultimately liable member.</p></div></li><li data-line-number="13" id="line-1-2-13"><div class="line-code"><a aria-label="第 13 行" class="line-number" href="#line-1-2-13">13</a><code>       SUM(e.amount) AS total_amount</code></div><div class="pair line-explanation"><p lang="zh-CN">SUM(e.amount) 把同一根账号下的有效收费相加，结果列叫 total_amount。SUM 会忽略 NULL；下面仍显式限定 Return 和 Incident 来表达业务含义。</p><p lang="en">Sum charge amounts for each root as total_amount. SUM ignores NULL, while the explicit event-type filter states which events are charges.</p></div></li><li data-line-number="14" id="line-1-2-14"><div class="line-code"><a aria-label="第 14 行" class="line-number" href="#line-1-2-14">14</a><code>FROM account_tree t</code></div><div class="pair line-explanation"><p lang="zh-CN">给 account_tree 结果别名 t。t.member_id 表示收费成员，t.account_id 表示该成员最终归属的付款账号。</p><p lang="en">Read account_tree as t: t.member_id is the charged member and t.account_id is the ultimately liable account.</p></div></li><li data-line-number="15" id="line-1-2-15"><div class="line-code"><a aria-label="第 15 行" class="line-number" href="#line-1-2-15">15</a><code>JOIN MEMBERS root ON root.member_id = t.account_id</code></div><div class="pair line-explanation"><p lang="zh-CN">用 t.account_id 找到 MEMBERS 中的根账号 root，取得它的姓名。不能把 root 接到 t.member_id，否则输出会变成每位驾驶成员的个人账单。</p><p lang="en">Join t.account_id to the root member record for its name. Joining root to t.member_id instead would report individual drivers rather than ultimate payers.</p></div></li><li data-line-number="16" id="line-1-2-16"><div class="line-code"><a aria-label="第 16 行" class="line-number" href="#line-1-2-16">16</a><code>JOIN BOOKING_EVENTS e ON e.member_id = t.member_id</code></div><div class="pair line-explanation"><p lang="zh-CN">把每条收费事件按 e.member_id 接到映射中的收费成员 t.member_id。一次事件只接到它唯一的根映射，避免在多个祖先账户重复累加。</p><p lang="en">Join each event’s member_id to the charged member in the mapping. Its unique root mapping prevents counting one event once at each ancestor.</p></div></li><li data-line-number="17" id="line-1-2-17"><div class="line-code"><a aria-label="第 17 行" class="line-number" href="#line-1-2-17">17</a><code>WHERE e.event_type IN ('Return', 'Incident')</code></div><div class="pair line-explanation"><p lang="zh-CN">只保留 Return 车费和 Incident 损坏收费。Reserve、Collect、Cancel 不属于本题费用事件，即使它们与同一成员有关也不应计入收费总额。</p><p lang="en">Keep Return fares and Incident damage charges, excluding Reserve, Collect and Cancel from the monetary totals.</p></div></li><li data-line-number="18" id="line-1-2-18"><div class="line-code"><a aria-label="第 18 行" class="line-number" href="#line-1-2-18">18</a><code>  AND e.event_time &gt;= TIMESTAMP '2026-01-01'</code></div><div class="pair line-explanation"><p lang="zh-CN">使用带类型的 TIMESTAMP 字面量，从 2026-01-01 零点起包含记录。&gt;= 保留恰好在年初零点发生的收费。</p><p lang="en">Use a typed TIMESTAMP lower bound and include records at or after midnight on 1 January 2026.</p></div></li><li data-line-number="19" id="line-1-2-19"><div class="line-code"><a aria-label="第 19 行" class="line-number" href="#line-1-2-19">19</a><code>  AND e.event_time &lt;  TIMESTAMP '2026-07-01'</code></div><div class="pair line-explanation"><p lang="zh-CN">排除 2026-07-01 零点及之后，因而包含 6 月 30 日的全部时间。这种半开区间不会像 &lt;= 2026-06-30 零点那样漏掉最后一天后续事件。</p><p lang="en">Exclude midnight on 1 July and later, thereby including all of 30 June. The half-open interval avoids truncating the final day at its midnight.</p></div></li><li data-line-number="20" id="line-1-2-20"><div class="line-code"><a aria-label="第 20 行" class="line-number" href="#line-1-2-20">20</a><code>GROUP BY root.member_id, root.member_name</code></div><div class="pair line-explanation"><p lang="zh-CN">按最终根账号分组，同一个根名下的自己、子账号及更深层成员的费用合成一行。member_id 是主键，也避免把同名但不同 ID 的人合并。</p><p lang="en">Group charges by the ultimate root account, including its own and all descendants’ charges. The identifier keeps distinct people with equal names separate.</p></div></li><li data-line-number="21" id="line-1-2-21"><div class="line-code"><a aria-label="第 21 行" class="line-number" href="#line-1-2-21">21</a><code>ORDER BY total_amount DESC, root.member_id</code></div><div class="pair line-explanation"><p lang="zh-CN">先按总金额降序，金额相同再按根 member_id 升序。这个稳定的次排序让恰好前十名在并列边界时仍有确定选择。</p><p lang="en">Sort total liability descending, then member_id ascending to make selection deterministic at a tied top-ten boundary.</p></div></li><li data-line-number="22" id="line-1-2-22"><div class="line-code"><a aria-label="第 22 行" class="line-number" href="#line-1-2-22">22</a><code>LIMIT 10;</code></div><div class="pair line-explanation"><p lang="zh-CN">LIMIT 10 在排序后只保留最高的十个根账户。不能先截取十条收费事件或十个成员再求和，否则会改变题目要计算的全体费用。</p><p lang="en">After sorting, retain the ten highest-liability root accounts. Limiting charge rows or members before aggregation would compute the wrong population.</p></div></li></ol></details>
+<details class="evidence-details"><summary>实际输出 / Captured output · 1.2_1</summary><pre class="evidence-output"><code>CREATE VIEW V_ACCOUNT_LIABILITY AS
+WITH RECURSIVE account_tree AS (
+    SELECT member_id, member_id AS account_id
+    FROM MEMBERS
+    WHERE sponsor_id IS NULL
+    UNION ALL
+    SELECT child.member_id, parent.account_id
+    FROM MEMBERS child
+    JOIN account_tree parent ON child.sponsor_id = parent.member_id
+)
+SELECT root.member_id, root.member_name,
+       SUM(e.amount) AS total_amount
+FROM account_tree t
+JOIN MEMBERS root ON root.member_id = t.account_id
+JOIN BOOKING_EVENTS e ON e.member_id = t.member_id
+WHERE e.event_type IN ('Return', 'Incident')
+  AND e.event_time &gt;= TIMESTAMP '2026-01-01'
+  AND e.event_time &lt;  TIMESTAMP '2026-07-01'
+GROUP BY root.member_id, root.member_name
+ORDER BY total_amount DESC, root.member_id
+LIMIT 10;
+CREATE VIEW
+</code></pre><div class="part-links"><span class="local-material-reference">原始日志 / Raw transcript ↗（原资料留在本地版）</span><span class="local-material-reference">输出截图 / Output screenshots ↗（原资料留在本地版）</span></div></details>
+</div></details><label class="mastery-control"><input data-mastered="A2-1.2" type="checkbox"/><span lang="zh-CN">我能解释并独立复现这题</span><span lang="en">I can explain and reproduce this part.</span></label></div>
+<div class="question a2-part" id="A2-1.3.1"><div class="a2-part-head"><h3>Q1.3.1</h3><span class="tag">TASK SUMMARY + LINE GUIDE</span></div>
+
+<div class="task-translation-label">中文题意 / Task in Chinese</div>
+<div class="pair"><p lang="zh-CN">（0分）用与普通视图相同的查询建立物化视图。</p><p lang="en">(0 marks) Create MV_ACCOUNT_LIABILITY using the same query as the ordinary view.</p></div>
+<details><summary>解答、逐行代码与实测依据 / Solution, line guide and evidence</summary><div class="answer-body">
+<div class="pair"><p lang="zh-CN">用与 V_ACCOUNT_LIABILITY 完全相同的递归查询创建 MV_ACCOUNT_LIABILITY。CREATE MATERIALIZED VIEW 执行时就计算并保存结果，本次保存 10 行；之后读取不必每次重算。</p><p lang="en">Create MV_ACCOUNT_LIABILITY using the same recursive query as the ordinary view. Creation computes and stores ten rows, which later reads can scan without repeating the derivation.</p></div>
+<div class="code-block"><div class="code-label"><span>A2_1.3.1.sql</span><button class="copy-code" data-copy-code="">复制 SQL / Copy SQL</button></div><pre data-language="sql"><code>-- INFS7903 Assignment 2 | Public teaching edition
+CREATE MATERIALIZED VIEW MV_ACCOUNT_LIABILITY AS
+WITH RECURSIVE account_tree AS (
+    SELECT member_id, member_id AS account_id
+    FROM MEMBERS
+    WHERE sponsor_id IS NULL
+    UNION ALL
+    SELECT child.member_id, parent.account_id
+    FROM MEMBERS child
+    JOIN account_tree parent ON child.sponsor_id = parent.member_id
+)
+SELECT root.member_id, root.member_name,
+       SUM(e.amount) AS total_amount
+FROM account_tree t
+JOIN MEMBERS root ON root.member_id = t.account_id
+JOIN BOOKING_EVENTS e ON e.member_id = t.member_id
+WHERE e.event_type IN ('Return', 'Incident')
+  AND e.event_time &gt;= TIMESTAMP '2026-01-01'
+  AND e.event_time &lt;  TIMESTAMP '2026-07-01'
+GROUP BY root.member_id, root.member_name
+ORDER BY total_amount DESC, root.member_id
+LIMIT 10;
+</code></pre><a class="text-button" download="" href="../../assignments/a2/sql/A2_1.3.1.sql">下载本题 SQL / Download SQL ↗</a></div>
+<details class="line-guide-panel" data-line-guide="1.3.1" open=""><summary>每一行在做什么 / Read every line · 22 行</summary><p class="line-guide-intro">行号与上方代码一致。先读这一行改变了什么，再把它放回整条查询；括号、别名和注释也有说明。</p><ol class="line-guide"><li data-line-number="1" id="line-1-3-1-1"><div class="line-code"><a aria-label="第 1 行" class="line-number" href="#line-1-3-1-1">01</a><code>-- INFS7903 Assignment 2 | Public teaching edition</code></div><div class="pair line-explanation"><p lang="zh-CN">文件说明注释：公开教学版本已移除提交者身份。-- 后直到行末不作为 SQL 执行，不会改变查询或会话；行号仍与下载文件一致。</p><p lang="en">Public-edition header with author identifiers removed. Text after -- is a non-executable comment; line numbers still match the downloadable file.</p></div></li><li data-line-number="2" id="line-1-3-1-2"><div class="line-code"><a aria-label="第 2 行" class="line-number" href="#line-1-3-1-2">02</a><code>CREATE MATERIALIZED VIEW MV_ACCOUNT_LIABILITY AS</code></div><div class="pair line-explanation"><p lang="zh-CN">CREATE MATERIALIZED VIEW 把同一个递归查询的当前结果实际存成 MV_ACCOUNT_LIABILITY。与普通视图不同，后续底层表变化不会自动更新这份结果，需要 REFRESH。</p><p lang="en">CREATE MATERIALIZED VIEW stores the current recursive-query result as MV_ACCOUNT_LIABILITY. Unlike an ordinary view, it does not automatically reflect later base-table changes and requires REFRESH.</p></div></li><li data-line-number="3" id="line-1-3-1-3"><div class="line-code"><a aria-label="第 3 行" class="line-number" href="#line-1-3-1-3">03</a><code>WITH RECURSIVE account_tree AS (</code></div><div class="pair line-explanation"><p lang="zh-CN">WITH RECURSIVE 允许 account_tree 在后半段引用自己的当前递归结果。这里从无赞助人的根账号往下找孩子，把每个成员映射到最终付款账号。</p><p lang="en">WITH RECURSIVE lets account_tree refer to its current recursive rows. The traversal starts at unsponsored roots and propagates the ultimate payer down to descendants.</p></div></li><li data-line-number="4" id="line-1-3-1-4"><div class="line-code"><a aria-label="第 4 行" class="line-number" href="#line-1-3-1-4">04</a><code>    SELECT member_id, member_id AS account_id</code></div><div class="pair line-explanation"><p lang="zh-CN">基础层把根账号的 member_id 同时输出为 member_id 和 account_id。前者是“当前成员”，后者是“一直保留的最终付款根”，例如根 13943 对应 (13943,13943)。</p><p lang="en">The seed emits a root’s member_id twice: the current member and its ultimate account_id. Root 13943 therefore begins as (13943,13943).</p></div></li><li data-line-number="5" id="line-1-3-1-5"><div class="line-code"><a aria-label="第 5 行" class="line-number" href="#line-1-3-1-5">05</a><code>    FROM MEMBERS</code></div><div class="pair line-explanation"><p lang="zh-CN">基础层从 MEMBERS 成员表读取，尚未访问收费日志。先建立成员到根的对应关系，再连接收费，能清楚区分层级关系与金额汇总。</p><p lang="en">Read MEMBERS for the seed, before joining any charges. This separates hierarchy resolution from monetary aggregation.</p></div></li><li data-line-number="6" id="line-1-3-1-6"><div class="line-code"><a aria-label="第 6 行" class="line-number" href="#line-1-3-1-6">06</a><code>    WHERE sponsor_id IS NULL</code></div><div class="pair line-explanation"><p lang="zh-CN">sponsor_id 为 NULL 的成员没有上级，需要自己付款，因此是根节点。判断 NULL 必须用 IS NULL，写 = NULL 不会得到期望的真值。</p><p lang="en">Members with sponsor_id IS NULL are self-paying roots. IS NULL is required because ordinary equality with NULL does not test for nullness.</p></div></li><li data-line-number="7" id="line-1-3-1-7"><div class="line-code"><a aria-label="第 7 行" class="line-number" href="#line-1-3-1-7">07</a><code>    UNION ALL</code></div><div class="pair line-explanation"><p lang="zh-CN">UNION ALL 合并基础层和后面一轮轮找出的孩子，不做去重。对给定的无环、每人至多一个 sponsor 的层级，每个成员只有一条根路径；这段代码本身不是通用的环检测器。</p><p lang="en">UNION ALL appends recursive descendants without deduplication. In the supplied acyclic single-sponsor hierarchy, each member has one root path; this query is not a general cycle detector.</p></div></li><li data-line-number="8" id="line-1-3-1-8"><div class="line-code"><a aria-label="第 8 行" class="line-number" href="#line-1-3-1-8">08</a><code>    SELECT child.member_id, parent.account_id</code></div><div class="pair line-explanation"><p lang="zh-CN">每次输出孩子自己的 member_id，但 account_id 仍复制父行携带的根账号。不能在此改成 parent.member_id，否则深层成员会被错误归到直接父母。</p><p lang="en">Emit the child’s own member_id but retain the parent row’s ultimate account_id. Using parent.member_id instead would incorrectly bill deeper descendants to an intermediate sponsor.</p></div></li><li data-line-number="9" id="line-1-3-1-9"><div class="line-code"><a aria-label="第 9 行" class="line-number" href="#line-1-3-1-9">09</a><code>    FROM MEMBERS child</code></div><div class="pair line-explanation"><p lang="zh-CN">把成员表中的候选孩子命名为 child。它们可能属于任意一层；是否接上当前递归结果，由下一行的连接条件决定。</p><p lang="en">Read candidate child members from MEMBERS. The next join decides which ones descend from the current recursive frontier.</p></div></li><li data-line-number="10" id="line-1-3-1-10"><div class="line-code"><a aria-label="第 10 行" class="line-number" href="#line-1-3-1-10">10</a><code>    JOIN account_tree parent ON child.sponsor_id = parent.member_id</code></div><div class="pair line-explanation"><p lang="zh-CN">child.sponsor_id 等于当前 parent.member_id 时，说明这个成员直接受该 parent 赞助；递归继续往下扩展。parent 是 CTE 的递归行别名，不一定是最终根。</p><p lang="en">Match a child’s sponsor_id to a current parent member_id and extend the traversal. parent names a recursive row, which may itself be an intermediate account.</p></div></li><li data-line-number="11" id="line-1-3-1-11"><div class="line-code"><a aria-label="第 11 行" class="line-number" href="#line-1-3-1-11">11</a><code>)</code></div><div class="pair line-explanation"><p lang="zh-CN">结束递归 CTE。此时给定数据中的 24,000 名成员各有一个 account_id；后面的聚合使用这份映射，递归本身不负责金额相加。</p><p lang="en">Close the recursive CTE. The supplied data maps all 24,000 members to account_id; monetary aggregation happens afterward.</p></div></li><li data-line-number="12" id="line-1-3-1-12"><div class="line-code"><a aria-label="第 12 行" class="line-number" href="#line-1-3-1-12">12</a><code>SELECT root.member_id, root.member_name,</code></div><div class="pair line-explanation"><p lang="zh-CN">输出根账号的 ID 和姓名，而不是产生费用的下属姓名。root 是下一步连接得到的最终付款成员记录。</p><p lang="en">Select the root account’s identifier and name, not the descendant who incurred the charge. root will identify that ultimately liable member.</p></div></li><li data-line-number="13" id="line-1-3-1-13"><div class="line-code"><a aria-label="第 13 行" class="line-number" href="#line-1-3-1-13">13</a><code>       SUM(e.amount) AS total_amount</code></div><div class="pair line-explanation"><p lang="zh-CN">SUM(e.amount) 把同一根账号下的有效收费相加，结果列叫 total_amount。SUM 会忽略 NULL；下面仍显式限定 Return 和 Incident 来表达业务含义。</p><p lang="en">Sum charge amounts for each root as total_amount. SUM ignores NULL, while the explicit event-type filter states which events are charges.</p></div></li><li data-line-number="14" id="line-1-3-1-14"><div class="line-code"><a aria-label="第 14 行" class="line-number" href="#line-1-3-1-14">14</a><code>FROM account_tree t</code></div><div class="pair line-explanation"><p lang="zh-CN">给 account_tree 结果别名 t。t.member_id 表示收费成员，t.account_id 表示该成员最终归属的付款账号。</p><p lang="en">Read account_tree as t: t.member_id is the charged member and t.account_id is the ultimately liable account.</p></div></li><li data-line-number="15" id="line-1-3-1-15"><div class="line-code"><a aria-label="第 15 行" class="line-number" href="#line-1-3-1-15">15</a><code>JOIN MEMBERS root ON root.member_id = t.account_id</code></div><div class="pair line-explanation"><p lang="zh-CN">用 t.account_id 找到 MEMBERS 中的根账号 root，取得它的姓名。不能把 root 接到 t.member_id，否则输出会变成每位驾驶成员的个人账单。</p><p lang="en">Join t.account_id to the root member record for its name. Joining root to t.member_id instead would report individual drivers rather than ultimate payers.</p></div></li><li data-line-number="16" id="line-1-3-1-16"><div class="line-code"><a aria-label="第 16 行" class="line-number" href="#line-1-3-1-16">16</a><code>JOIN BOOKING_EVENTS e ON e.member_id = t.member_id</code></div><div class="pair line-explanation"><p lang="zh-CN">把每条收费事件按 e.member_id 接到映射中的收费成员 t.member_id。一次事件只接到它唯一的根映射，避免在多个祖先账户重复累加。</p><p lang="en">Join each event’s member_id to the charged member in the mapping. Its unique root mapping prevents counting one event once at each ancestor.</p></div></li><li data-line-number="17" id="line-1-3-1-17"><div class="line-code"><a aria-label="第 17 行" class="line-number" href="#line-1-3-1-17">17</a><code>WHERE e.event_type IN ('Return', 'Incident')</code></div><div class="pair line-explanation"><p lang="zh-CN">只保留 Return 车费和 Incident 损坏收费。Reserve、Collect、Cancel 不属于本题费用事件，即使它们与同一成员有关也不应计入收费总额。</p><p lang="en">Keep Return fares and Incident damage charges, excluding Reserve, Collect and Cancel from the monetary totals.</p></div></li><li data-line-number="18" id="line-1-3-1-18"><div class="line-code"><a aria-label="第 18 行" class="line-number" href="#line-1-3-1-18">18</a><code>  AND e.event_time &gt;= TIMESTAMP '2026-01-01'</code></div><div class="pair line-explanation"><p lang="zh-CN">使用带类型的 TIMESTAMP 字面量，从 2026-01-01 零点起包含记录。&gt;= 保留恰好在年初零点发生的收费。</p><p lang="en">Use a typed TIMESTAMP lower bound and include records at or after midnight on 1 January 2026.</p></div></li><li data-line-number="19" id="line-1-3-1-19"><div class="line-code"><a aria-label="第 19 行" class="line-number" href="#line-1-3-1-19">19</a><code>  AND e.event_time &lt;  TIMESTAMP '2026-07-01'</code></div><div class="pair line-explanation"><p lang="zh-CN">排除 2026-07-01 零点及之后，因而包含 6 月 30 日的全部时间。这种半开区间不会像 &lt;= 2026-06-30 零点那样漏掉最后一天后续事件。</p><p lang="en">Exclude midnight on 1 July and later, thereby including all of 30 June. The half-open interval avoids truncating the final day at its midnight.</p></div></li><li data-line-number="20" id="line-1-3-1-20"><div class="line-code"><a aria-label="第 20 行" class="line-number" href="#line-1-3-1-20">20</a><code>GROUP BY root.member_id, root.member_name</code></div><div class="pair line-explanation"><p lang="zh-CN">按最终根账号分组，同一个根名下的自己、子账号及更深层成员的费用合成一行。member_id 是主键，也避免把同名但不同 ID 的人合并。</p><p lang="en">Group charges by the ultimate root account, including its own and all descendants’ charges. The identifier keeps distinct people with equal names separate.</p></div></li><li data-line-number="21" id="line-1-3-1-21"><div class="line-code"><a aria-label="第 21 行" class="line-number" href="#line-1-3-1-21">21</a><code>ORDER BY total_amount DESC, root.member_id</code></div><div class="pair line-explanation"><p lang="zh-CN">先按总金额降序，金额相同再按根 member_id 升序。这个稳定的次排序让恰好前十名在并列边界时仍有确定选择。</p><p lang="en">Sort total liability descending, then member_id ascending to make selection deterministic at a tied top-ten boundary.</p></div></li><li data-line-number="22" id="line-1-3-1-22"><div class="line-code"><a aria-label="第 22 行" class="line-number" href="#line-1-3-1-22">22</a><code>LIMIT 10;</code></div><div class="pair line-explanation"><p lang="zh-CN">LIMIT 10 在排序后只保留最高的十个根账户。不能先截取十条收费事件或十个成员再求和，否则会改变题目要计算的全体费用。</p><p lang="en">After sorting, retain the ten highest-liability root accounts. Limiting charge rows or members before aggregation would compute the wrong population.</p></div></li></ol></details>
+<details class="evidence-details"><summary>实际输出 / Captured output · 1.3.1_1</summary><pre class="evidence-output"><code>CREATE MATERIALIZED VIEW MV_ACCOUNT_LIABILITY AS
+WITH RECURSIVE account_tree AS (
+    SELECT member_id, member_id AS account_id
+    FROM MEMBERS
+    WHERE sponsor_id IS NULL
+    UNION ALL
+    SELECT child.member_id, parent.account_id
+    FROM MEMBERS child
+    JOIN account_tree parent ON child.sponsor_id = parent.member_id
+)
+SELECT root.member_id, root.member_name,
+       SUM(e.amount) AS total_amount
+FROM account_tree t
+JOIN MEMBERS root ON root.member_id = t.account_id
+JOIN BOOKING_EVENTS e ON e.member_id = t.member_id
+WHERE e.event_type IN ('Return', 'Incident')
+  AND e.event_time &gt;= TIMESTAMP '2026-01-01'
+  AND e.event_time &lt;  TIMESTAMP '2026-07-01'
+GROUP BY root.member_id, root.member_name
+ORDER BY total_amount DESC, root.member_id
+LIMIT 10;
+SELECT 10
+</code></pre><div class="part-links"><span class="local-material-reference">原始日志 / Raw transcript ↗（原资料留在本地版）</span><span class="local-material-reference">输出截图 / Output screenshots ↗（原资料留在本地版）</span></div></details>
+</div></details><label class="mastery-control"><input data-mastered="A2-1.3.1" type="checkbox"/><span lang="zh-CN">我能解释并独立复现这题</span><span lang="en">I can explain and reproduce this part.</span></label></div>
+<div class="question a2-part" id="A2-1.3.2"><div class="a2-part-head"><h3>Q1.3.2</h3><span class="tag">TASK SUMMARY + LINE GUIDE</span></div>
+
+<div class="task-translation-label">中文题意 / Task in Chinese</div>
+<div class="pair"><p lang="zh-CN">（0.5分）比较普通与物化视图的查询及计划。</p><p lang="en">(0.5 marks) Compare Query A ordinary-view SELECT and Query B materialised-view SELECT, including both plans.</p></div>
+<details><summary>解答、逐行代码与实测依据 / Solution, line guide and evidence</summary><div class="answer-body">
+<div class="pair"><p lang="zh-CN">两个查询最初都返回相同 10 行，Ana Lopez（14881）以 6,214.77 居首。普通视图展开为递归、连接、聚合和 top-N 排序；建立 24,000 人的映射，处理 30,275 条期间内收费事件；cost 389551.20..389551.22，执行 48.775 ms。</p><p lang="en">Both queries initially return the same ten accounts, led by Ana Lopez (14881) with 6,214.77. Query A expands the ordinary view into Recursive Union, joins, HashAggregate and a top-N sort. It builds the 24,000-member account mapping and aggregates 30,275 eligible events. Its top cost is 389551.20..389551.22; execution takes 48.775 ms.</p></div>
+<div class="pair"><p lang="zh-CN">物化视图只扫描已存的 10 行，cost 0.00..18.50，执行 0.055 ms。新关系还未 ANALYZE，估计 850 行不等于实际存了 850 行。读取节省重算；若要求保证显示顺序，读取保存的关系时仍应明确 ORDER BY。</p><p lang="en">Query B scans only the stored ten-row materialized result, with cost 0.00..18.50 and execution time 0.055 ms. The plan estimates 850 rows but actually returns 10 because the newly created materialized relation has not been analyzed. This estimate does not mean that 850 result rows were stored. The materialized view avoids recomputing recursion, joins and aggregation at read time. SQL consumers needing guaranteed output order should use an explicit ORDER BY when reading a stored relation.</p></div>
+<div class="code-block"><div class="code-label"><span>A2_1.3.2.sql</span><button class="copy-code" data-copy-code="">复制 SQL / Copy SQL</button></div><pre data-language="sql"><code>-- INFS7903 Assignment 2 | Public teaching edition
+-- Query A
+SELECT * FROM V_ACCOUNT_LIABILITY;
+EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM V_ACCOUNT_LIABILITY;
+-- Query B
+SELECT * FROM MV_ACCOUNT_LIABILITY;
+EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM MV_ACCOUNT_LIABILITY;
+</code></pre><a class="text-button" download="" href="../../assignments/a2/sql/A2_1.3.2.sql">下载本题 SQL / Download SQL ↗</a></div>
+<details class="line-guide-panel" data-line-guide="1.3.2" open=""><summary>每一行在做什么 / Read every line · 7 行</summary><p class="line-guide-intro">行号与上方代码一致。先读这一行改变了什么，再把它放回整条查询；括号、别名和注释也有说明。</p><ol class="line-guide"><li data-line-number="1" id="line-1-3-2-1"><div class="line-code"><a aria-label="第 1 行" class="line-number" href="#line-1-3-2-1">01</a><code>-- INFS7903 Assignment 2 | Public teaching edition</code></div><div class="pair line-explanation"><p lang="zh-CN">文件说明注释：公开教学版本已移除提交者身份。-- 后直到行末不作为 SQL 执行，不会改变查询或会话；行号仍与下载文件一致。</p><p lang="en">Public-edition header with author identifiers removed. Text after -- is a non-executable comment; line numbers still match the downloadable file.</p></div></li><li data-line-number="2" id="line-1-3-2-2"><div class="line-code"><a aria-label="第 2 行" class="line-number" href="#line-1-3-2-2">02</a><code>-- Query A</code></div><div class="pair line-explanation"><p lang="zh-CN">注释标记 Query A，读取普通视图；-- 后的文字不会执行。</p><p lang="en">Label Query A, the ordinary-view read; the comment is not executed.</p></div></li><li data-line-number="3" id="line-1-3-2-3"><div class="line-code"><a aria-label="第 3 行" class="line-number" href="#line-1-3-2-3">03</a><code>SELECT * FROM V_ACCOUNT_LIABILITY;</code></div><div class="pair line-explanation"><p lang="zh-CN">读取 V_ACCOUNT_LIABILITY 的全部结果列。这个 SELECT 才用于展示结果；下一条 EXPLAIN ANALYZE 另用于研究执行方式，两次运行的缓存和计时可能不同。</p><p lang="en">Read all result columns from V_ACCOUNT_LIABILITY. This SELECT displays tuples; the separate EXPLAIN ANALYZE studies execution, and the two runs may see different cache state and timing.</p></div></li><li data-line-number="4" id="line-1-3-2-4"><div class="line-code"><a aria-label="第 4 行" class="line-number" href="#line-1-3-2-4">04</a><code>EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM V_ACCOUNT_LIABILITY;</code></div><div class="pair line-explanation"><p lang="zh-CN">EXPLAIN 显示“the ordinary liability view”的物理执行计划；ANALYZE 会真正运行该查询并记录实际耗时、行数与 loops，BUFFERS 增加缓冲页访问统计。这里不逐行打印普通查询结果；cost 是估计单位，不能直接当毫秒，也不能把父子节点时间简单相加。</p><p lang="en">EXPLAIN shows the physical plan for the ordinary liability view. ANALYZE really executes it and records actual timing, rows and loops; BUFFERS adds page-access statistics. It does not return ordinary result tuples, cost is not milliseconds, and parent/child timings must not simply be summed.</p></div></li><li data-line-number="5" id="line-1-3-2-5"><div class="line-code"><a aria-label="第 5 行" class="line-number" href="#line-1-3-2-5">05</a><code>-- Query B</code></div><div class="pair line-explanation"><p lang="zh-CN">注释标记 Query B，读取已保存结果的物化视图。A 与 B 必须在同一数据阶段比较。</p><p lang="en">Label Query B, the stored materialized result. Compare A and B at the same data stage.</p></div></li><li data-line-number="6" id="line-1-3-2-6"><div class="line-code"><a aria-label="第 6 行" class="line-number" href="#line-1-3-2-6">06</a><code>SELECT * FROM MV_ACCOUNT_LIABILITY;</code></div><div class="pair line-explanation"><p lang="zh-CN">读取 MV_ACCOUNT_LIABILITY 的全部结果列。这个 SELECT 才用于展示结果；下一条 EXPLAIN ANALYZE 另用于研究执行方式，两次运行的缓存和计时可能不同。</p><p lang="en">Read all result columns from MV_ACCOUNT_LIABILITY. This SELECT displays tuples; the separate EXPLAIN ANALYZE studies execution, and the two runs may see different cache state and timing.</p></div></li><li data-line-number="7" id="line-1-3-2-7"><div class="line-code"><a aria-label="第 7 行" class="line-number" href="#line-1-3-2-7">07</a><code>EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM MV_ACCOUNT_LIABILITY;</code></div><div class="pair line-explanation"><p lang="zh-CN">EXPLAIN 显示“the materialized liability view”的物理执行计划；ANALYZE 会真正运行该查询并记录实际耗时、行数与 loops，BUFFERS 增加缓冲页访问统计。这里不逐行打印普通查询结果；cost 是估计单位，不能直接当毫秒，也不能把父子节点时间简单相加。</p><p lang="en">EXPLAIN shows the physical plan for the materialized liability view. ANALYZE really executes it and records actual timing, rows and loops; BUFFERS adds page-access statistics. It does not return ordinary result tuples, cost is not milliseconds, and parent/child timings must not simply be summed.</p></div></li></ol></details>
+<details class="evidence-details"><summary>实际输出 / Captured output · 1.3.2_1</summary><pre class="evidence-output"><code>-- Query A
+SELECT * FROM V_ACCOUNT_LIABILITY;
+ member_id |  member_name   | total_amount 
+-----------+----------------+--------------
+     14881 | Ana Lopez      |      6214.77
+     13572 | Samuel Choi    |      5629.17
+       414 | Nikau Anderson |      4903.24
+     12727 | Rohan Wilson   |      4745.38
+      6147 | Lily Kim       |      4459.37
+      6558 | Tomas Ali      |      4387.82
+      5543 | Aisha Robinson |      4025.80
+     10682 | Rohan Novak    |      3965.63
+     11445 | Minh Bianchi   |      3864.68
+       397 | Nikau White    |      3834.32
+(10 rows)
+
+</code></pre><div class="part-links"><span class="local-material-reference">原始日志 / Raw transcript ↗（原资料留在本地版）</span><span class="local-material-reference">输出截图 / Output screenshots ↗（原资料留在本地版）</span></div></details>
+<details class="evidence-details"><summary>完整执行计划 / Full query plan · 1.3.2_2</summary><pre class="evidence-output"><code>EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM V_ACCOUNT_LIABILITY;
+                                                                                                                   QUERY PLAN                                                                                                                    
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=389551.20..389551.22 rows=10 width=48) (actual time=47.796..47.802 rows=10.00 loops=1)
+   Buffers: shared hit=2476
+   CTE account_tree
+     -&gt;  Recursive Union  (cost=0.00..102462.80 rows=1868540 width=8) (actual time=0.019..7.426 rows=24000.00 loops=1)
+           Storage: Memory  Maximum Storage: 860kB
+           Buffers: shared hit=556
+           -&gt;  Seq Scan on members  (cost=0.00..518.00 rows=15600 width=8) (actual time=0.017..1.335 rows=15600.00 loops=1)
+                 Filter: (sponsor_id IS NULL)
+                 Rows Removed by Filter: 8400
+                 Buffers: shared hit=278
+           -&gt;  Hash Join  (cost=818.00..8325.94 rows=185294 width=8) (actual time=0.542..1.166 rows=2100.00 loops=4)
+                 Hash Cond: (parent.member_id = child.sponsor_id)
+                 Buffers: shared hit=278
+                 -&gt;  WorkTable Scan on account_tree parent  (cost=0.00..3120.00 rows=156000 width=8) (actual time=0.001..0.143 rows=6000.00 loops=4)
+                 -&gt;  Hash  (cost=518.00..518.00 rows=24000 width=8) (actual time=2.055..2.055 rows=8400.00 loops=1)
+                       Buckets: 32768  Batches: 1  Memory Usage: 585kB
+                       Buffers: shared hit=278
+                       -&gt;  Seq Scan on members child  (cost=0.00..518.00 rows=24000 width=8) (actual time=0.023..1.136 rows=24000.00 loops=1)
+                             Buffers: shared hit=278
+   -&gt;  Sort  (cost=287088.40..287148.40 rows=24000 width=48) (actual time=47.794..47.797 rows=10.00 loops=1)
+         Sort Key: (sum(e.amount)) DESC, root.member_id
+         Sort Method: top-N heapsort  Memory: 26kB
+         Buffers: shared hit=2476
+         -&gt;  HashAggregate  (cost=286269.77..286569.77 rows=24000 width=48) (actual time=44.514..47.021 rows=10175.00 loops=1)
+               Group Key: root.member_id
+               Batches: 1  Memory Usage: 4625kB
+               Buffers: shared hit=2470
+               -&gt;  Hash Join  (cost=6274.50..270093.43 rows=3235267 width=22) (actual time=20.048..38.634 rows=30275.00 loops=1)
+                     Hash Cond: (t.member_id = e.member_id)
+                     Buffers: shared hit=2470
+                     -&gt;  Hash Join  (cost=818.00..43094.59 rows=1868540 width=20) (actual time=3.500..16.848 rows=24000.00 loops=1)
+                           Hash Cond: (t.account_id = root.member_id)
+                           Buffers: shared hit=834
+                           -&gt;  CTE Scan on account_tree t  (cost=0.00..37370.80 rows=1868540 width=8) (actual time=0.021..9.653 rows=24000.00 loops=1)
+                                 Storage: Memory  Maximum Storage: 1007kB
+                                 Buffers: shared hit=556
+                           -&gt;  Hash  (cost=518.00..518.00 rows=24000 width=16) (actual time=3.436..3.436 rows=24000.00 loops=1)
+                                 Buckets: 32768  Batches: 1  Memory Usage: 1400kB
+                                 Buffers: shared hit=278
+                                 -&gt;  Seq Scan on members root  (cost=0.00..518.00 rows=24000 width=16) (actual time=0.003..1.708 rows=24000.00 loops=1)
+                                       Buffers: shared hit=278
+                     -&gt;  Hash  (cost=5073.70..5073.70 rows=30624 width=10) (actual time=16.502..16.504 rows=30275.00 loops=1)
+                           Buckets: 32768  Batches: 1  Memory Usage: 1557kB
+                           Buffers: shared hit=1636
+                           -&gt;  Seq Scan on booking_events e  (cost=0.00..5073.70 rows=30624 width=10) (actual time=7.001..14.264 rows=30275.00 loops=1)
+                                 Filter: (((event_type)::text = ANY ('{Return,Incident}'::text[])) AND (event_time &gt;= '2026-01-01 00:00:00'::timestamp without time zone) AND (event_time &lt; '2026-07-01 00:00:00'::timestamp without time zone))
+                                 Rows Removed by Filter: 166165
+                                 Buffers: shared hit=1636
+ Planning:
+   Buffers: shared hit=374
+ Planning Time: 2.616 ms
+ Execution Time: 48.775 ms
+(52 rows)
+
+</code></pre><div class="part-links"><span class="local-material-reference">原始日志 / Raw transcript ↗（原资料留在本地版）</span><span class="local-material-reference">输出截图 / Output screenshots ↗（原资料留在本地版）</span></div></details>
+<details class="evidence-details"><summary>实际输出 / Captured output · 1.3.2_3</summary><pre class="evidence-output"><code>-- Query B
+SELECT * FROM MV_ACCOUNT_LIABILITY;
+ member_id |  member_name   | total_amount 
+-----------+----------------+--------------
+     14881 | Ana Lopez      |      6214.77
+     13572 | Samuel Choi    |      5629.17
+       414 | Nikau Anderson |      4903.24
+     12727 | Rohan Wilson   |      4745.38
+      6147 | Lily Kim       |      4459.37
+      6558 | Tomas Ali      |      4387.82
+      5543 | Aisha Robinson |      4025.80
+     10682 | Rohan Novak    |      3965.63
+     11445 | Minh Bianchi   |      3864.68
+       397 | Nikau White    |      3834.32
+(10 rows)
+
+</code></pre><div class="part-links"><span class="local-material-reference">原始日志 / Raw transcript ↗（原资料留在本地版）</span><span class="local-material-reference">输出截图 / Output screenshots ↗（原资料留在本地版）</span></div></details>
+<details class="evidence-details"><summary>完整执行计划 / Full query plan · 1.3.2_4</summary><pre class="evidence-output"><code>EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM MV_ACCOUNT_LIABILITY;
+                                                      QUERY PLAN                                                      
+----------------------------------------------------------------------------------------------------------------------
+ Seq Scan on mv_account_liability  (cost=0.00..18.50 rows=850 width=68) (actual time=0.008..0.009 rows=10.00 loops=1)
+   Buffers: shared hit=1
+ Planning:
+   Buffers: shared hit=35
+ Planning Time: 0.580 ms
+ Execution Time: 0.055 ms
+(6 rows)
+
+</code></pre><div class="part-links"><span class="local-material-reference">原始日志 / Raw transcript ↗（原资料留在本地版）</span><span class="local-material-reference">输出截图 / Output screenshots ↗（原资料留在本地版）</span></div></details>
+</div></details><label class="mastery-control"><input data-mastered="A2-1.3.2" type="checkbox"/><span lang="zh-CN">我能解释并独立复现这题</span><span lang="en">I can explain and reproduce this part.</span></label></div>
+<div class="question a2-part" id="A2-1.3.3"><div class="a2-part-head"><h3>Q1.3.3</h3><span class="tag">TASK SUMMARY + LINE GUIDE</span></div>
+
+<div class="task-translation-label">中文题意 / Task in Chinese</div>
+<div class="pair"><p lang="zh-CN">（0.5分）插入指定90000损坏费用，重查两视图，刷新后再查物化视图并解释取舍。</p><p lang="en">(0.5 marks) Insert the supplied 90000 Incident, re query both views, refresh and re query the materialised view; explain the trade-off.</p></div>
+<details><summary>解答、逐行代码与实测依据 / Solution, line guide and evidence</summary><div class="answer-body">
+<div class="pair"><p lang="zh-CN">新增 90,000 费用属于 member 24000；沿 24000 → 22086 → 18148 → 13943 归到 Tuan Haddad，总额变为 90,673.75。普通视图立刻把他排第一；物化视图刷新前仍显示以 Ana Lopez 居首的旧榜单，刷新后才一致，原第 10 名账号 397 被挤出。</p><p lang="en">The supplied INSERT chooses member 24000. Its sponsorship chain is 24000 -&gt; 22086 -&gt; 18148 -&gt; 13943, so the additional 90,000.00 is billed to Tuan Haddad (13943). Query A immediately puts that account first at 90,673.75. Query B still shows the earlier top ten, led by Ana Lopez, and does not include Tuan Haddad. After REFRESH, Query B shows the same updated ten rows as Query A; account 397 drops out of the top ten.</p></div>
+<div class="pair"><p lang="zh-CN">物化视图以额外存储、刷新开销和刷新间隔内的数据陈旧换取更快的读取；普通视图根据每次语句可见的数据重新计算。</p><p lang="en">A materialized view trades faster reads for extra storage, refresh work and potentially stale answers between refreshes. An ordinary view computes an answer from the data visible to each query.</p></div>
+<div class="code-block"><div class="code-label"><span>A2_1.3.3.sql</span><button class="copy-code" data-copy-code="">复制 SQL / Copy SQL</button></div><pre data-language="sql"><code>-- INFS7903 Assignment 2 | Public teaching edition
+INSERT INTO BOOKING_EVENTS (member_id, vehicle_id, event_type, event_time, amount)
+SELECT member_id, 'VEH-0001', 'Incident', TIMESTAMP '2026-05-04 09:15:00', 90000.00
+FROM MEMBERS WHERE sponsor_id IS NOT NULL ORDER BY member_id DESC LIMIT 1;
+-- Query A reflects the inserted charge immediately.
+SELECT * FROM V_ACCOUNT_LIABILITY;
+-- Query B still contains its stored result.
+SELECT * FROM MV_ACCOUNT_LIABILITY;
+REFRESH MATERIALIZED VIEW MV_ACCOUNT_LIABILITY;
+-- Query B after refresh.
+SELECT * FROM MV_ACCOUNT_LIABILITY;
+</code></pre><a class="text-button" download="" href="../../assignments/a2/sql/A2_1.3.3.sql">下载本题 SQL / Download SQL ↗</a></div>
+<details class="line-guide-panel" data-line-guide="1.3.3" open=""><summary>每一行在做什么 / Read every line · 11 行</summary><p class="line-guide-intro">行号与上方代码一致。先读这一行改变了什么，再把它放回整条查询；括号、别名和注释也有说明。</p><ol class="line-guide"><li data-line-number="1" id="line-1-3-3-1"><div class="line-code"><a aria-label="第 1 行" class="line-number" href="#line-1-3-3-1">01</a><code>-- INFS7903 Assignment 2 | Public teaching edition</code></div><div class="pair line-explanation"><p lang="zh-CN">文件说明注释：公开教学版本已移除提交者身份。-- 后直到行末不作为 SQL 执行，不会改变查询或会话；行号仍与下载文件一致。</p><p lang="en">Public-edition header with author identifiers removed. Text after -- is a non-executable comment; line numbers still match the downloadable file.</p></div></li><li data-line-number="2" id="line-1-3-3-2"><div class="line-code"><a aria-label="第 2 行" class="line-number" href="#line-1-3-3-2">02</a><code>INSERT INTO BOOKING_EVENTS (member_id, vehicle_id, event_type, event_time, amount)</code></div><div class="pair line-explanation"><p lang="zh-CN">INSERT INTO 指定要往事件表写入的五列，后面的 SELECT 为它产生一行值。没有写 event_id，让 SERIAL 的默认序列自动生成事件 ID。</p><p lang="en">INSERT INTO lists the five target event columns; the following SELECT supplies a row. Omitted event_id uses its SERIAL default sequence.</p></div></li><li data-line-number="3" id="line-1-3-3-3"><div class="line-code"><a aria-label="第 3 行" class="line-number" href="#line-1-3-3-3">03</a><code>SELECT member_id, 'VEH-0001', 'Incident', TIMESTAMP '2026-05-04 09:15:00', 90000.00</code></div><div class="pair line-explanation"><p lang="zh-CN">为选中的成员生成 VEH-0001、Incident、指定时间和 90000.00 五个值，与 INSERT 列顺序对应。这里用题目指定的 5 月时间，属于 Q1.2 的计费区间；不是把损坏费分摊给所有成员。</p><p lang="en">Build one row with the selected member, VEH-0001, Incident, the specified May timestamp and 90000.00 in target-column order. The charge lies within the liability window and is not assigned to every member.</p></div></li><li data-line-number="4" id="line-1-3-3-4"><div class="line-code"><a aria-label="第 4 行" class="line-number" href="#line-1-3-3-4">04</a><code>FROM MEMBERS WHERE sponsor_id IS NOT NULL ORDER BY member_id DESC LIMIT 1;</code></div><div class="pair line-explanation"><p lang="zh-CN">从有 sponsor 的成员中按 member_id 降序取 1 人，实际为 24000。WHERE 确保选中被赞助成员，ORDER BY DESC 与 LIMIT 1 决定唯一被收费的人；递归再把费用传到根 13943。</p><p lang="en">Choose the highest-ID sponsored member, 24000. WHERE requires sponsorship and descending order plus LIMIT 1 selects one person; recursion later bills root 13943.</p></div></li><li data-line-number="5" id="line-1-3-3-5"><div class="line-code"><a aria-label="第 5 行" class="line-number" href="#line-1-3-3-5">05</a><code>-- Query A reflects the inserted charge immediately.</code></div><div class="pair line-explanation"><p lang="zh-CN">注释提醒下一次查询应反映新收费。它本身既不刷新视图，也不产生任何结果。</p><p lang="en">This comment introduces the ordinary-view rerun; it performs no refresh or query itself.</p></div></li><li data-line-number="6" id="line-1-3-3-6"><div class="line-code"><a aria-label="第 6 行" class="line-number" href="#line-1-3-3-6">06</a><code>SELECT * FROM V_ACCOUNT_LIABILITY;</code></div><div class="pair line-explanation"><p lang="zh-CN">读取 V_ACCOUNT_LIABILITY 的全部结果列。这个 SELECT 才用于展示结果；下一条 EXPLAIN ANALYZE 另用于研究执行方式，两次运行的缓存和计时可能不同。</p><p lang="en">Read all result columns from V_ACCOUNT_LIABILITY. This SELECT displays tuples; the separate EXPLAIN ANALYZE studies execution, and the two runs may see different cache state and timing.</p></div></li><li data-line-number="7" id="line-1-3-3-7"><div class="line-code"><a aria-label="第 7 行" class="line-number" href="#line-1-3-3-7">07</a><code>-- Query B still contains its stored result.</code></div><div class="pair line-explanation"><p lang="zh-CN">注释指出此刻物化视图仍保存创建时的旧结果，用于对照陈旧性。</p><p lang="en">The comment introduces the still-stale stored result for comparison.</p></div></li><li data-line-number="8" id="line-1-3-3-8"><div class="line-code"><a aria-label="第 8 行" class="line-number" href="#line-1-3-3-8">08</a><code>SELECT * FROM MV_ACCOUNT_LIABILITY;</code></div><div class="pair line-explanation"><p lang="zh-CN">读取 MV_ACCOUNT_LIABILITY 的全部结果列。这个 SELECT 才用于展示结果；下一条 EXPLAIN ANALYZE 另用于研究执行方式，两次运行的缓存和计时可能不同。</p><p lang="en">Read all result columns from MV_ACCOUNT_LIABILITY. This SELECT displays tuples; the separate EXPLAIN ANALYZE studies execution, and the two runs may see different cache state and timing.</p></div></li><li data-line-number="9" id="line-1-3-3-9"><div class="line-code"><a aria-label="第 9 行" class="line-number" href="#line-1-3-3-9">09</a><code>REFRESH MATERIALIZED VIEW MV_ACCOUNT_LIABILITY;</code></div><div class="pair line-explanation"><p lang="zh-CN">REFRESH 重新执行物化视图的定义并替换其已保存结果。它刷新的是整个定义结果，不是只手动给某行加 90000；刷新后前十名单也可能变化。</p><p lang="en">REFRESH reruns the defining query and replaces the stored result, rather than manually adding 90000 to one row. Membership of the top ten may change.</p></div></li><li data-line-number="10" id="line-1-3-3-10"><div class="line-code"><a aria-label="第 10 行" class="line-number" href="#line-1-3-3-10">10</a><code>-- Query B after refresh.</code></div><div class="pair line-explanation"><p lang="zh-CN">注释标记刷新后的最后一次读取，以便与刷新前的 Query B 区分。</p><p lang="en">Label the final read after refresh, distinct from the stale Query B read.</p></div></li><li data-line-number="11" id="line-1-3-3-11"><div class="line-code"><a aria-label="第 11 行" class="line-number" href="#line-1-3-3-11">11</a><code>SELECT * FROM MV_ACCOUNT_LIABILITY;</code></div><div class="pair line-explanation"><p lang="zh-CN">读取 MV_ACCOUNT_LIABILITY after refresh 的全部结果列。这个 SELECT 才用于展示结果；下一条 EXPLAIN ANALYZE 另用于研究执行方式，两次运行的缓存和计时可能不同。</p><p lang="en">Read all result columns from MV_ACCOUNT_LIABILITY after refresh. This SELECT displays tuples; the separate EXPLAIN ANALYZE studies execution, and the two runs may see different cache state and timing.</p></div></li></ol></details>
+<details class="evidence-details"><summary>实际输出 / Captured output · 1.3.3_1</summary><pre class="evidence-output"><code>INSERT INTO BOOKING_EVENTS (member_id, vehicle_id, event_type, event_time, amount)
+SELECT member_id, 'VEH-0001', 'Incident', TIMESTAMP '2026-05-04 09:15:00', 90000.00
+FROM MEMBERS WHERE sponsor_id IS NOT NULL ORDER BY member_id DESC LIMIT 1;
+INSERT 0 1
+</code></pre><div class="part-links"><span class="local-material-reference">原始日志 / Raw transcript ↗（原资料留在本地版）</span><span class="local-material-reference">输出截图 / Output screenshots ↗（原资料留在本地版）</span></div></details>
+<details class="evidence-details"><summary>实际输出 / Captured output · 1.3.3_2</summary><pre class="evidence-output"><code>-- Query A reflects the inserted charge immediately.
+SELECT * FROM V_ACCOUNT_LIABILITY;
+ member_id |  member_name   | total_amount 
+-----------+----------------+--------------
+     13943 | Tuan Haddad    |     90673.75
+     14881 | Ana Lopez      |      6214.77
+     13572 | Samuel Choi    |      5629.17
+       414 | Nikau Anderson |      4903.24
+     12727 | Rohan Wilson   |      4745.38
+      6147 | Lily Kim       |      4459.37
+      6558 | Tomas Ali      |      4387.82
+      5543 | Aisha Robinson |      4025.80
+     10682 | Rohan Novak    |      3965.63
+     11445 | Minh Bianchi   |      3864.68
+(10 rows)
+
+</code></pre><div class="part-links"><span class="local-material-reference">原始日志 / Raw transcript ↗（原资料留在本地版）</span><span class="local-material-reference">输出截图 / Output screenshots ↗（原资料留在本地版）</span></div></details>
+<details class="evidence-details"><summary>实际输出 / Captured output · 1.3.3_3</summary><pre class="evidence-output"><code>-- Query B still contains its stored result.
+SELECT * FROM MV_ACCOUNT_LIABILITY;
+ member_id |  member_name   | total_amount 
+-----------+----------------+--------------
+     14881 | Ana Lopez      |      6214.77
+     13572 | Samuel Choi    |      5629.17
+       414 | Nikau Anderson |      4903.24
+     12727 | Rohan Wilson   |      4745.38
+      6147 | Lily Kim       |      4459.37
+      6558 | Tomas Ali      |      4387.82
+      5543 | Aisha Robinson |      4025.80
+     10682 | Rohan Novak    |      3965.63
+     11445 | Minh Bianchi   |      3864.68
+       397 | Nikau White    |      3834.32
+(10 rows)
+
+</code></pre><div class="part-links"><span class="local-material-reference">原始日志 / Raw transcript ↗（原资料留在本地版）</span><span class="local-material-reference">输出截图 / Output screenshots ↗（原资料留在本地版）</span></div></details>
+<details class="evidence-details"><summary>实际输出 / Captured output · 1.3.3_4</summary><pre class="evidence-output"><code>REFRESH MATERIALIZED VIEW MV_ACCOUNT_LIABILITY;
+REFRESH MATERIALIZED VIEW
+</code></pre><div class="part-links"><span class="local-material-reference">原始日志 / Raw transcript ↗（原资料留在本地版）</span><span class="local-material-reference">输出截图 / Output screenshots ↗（原资料留在本地版）</span></div></details>
+<details class="evidence-details"><summary>实际输出 / Captured output · 1.3.3_5</summary><pre class="evidence-output"><code>-- Query B after refresh.
+SELECT * FROM MV_ACCOUNT_LIABILITY;
+ member_id |  member_name   | total_amount 
+-----------+----------------+--------------
+     13943 | Tuan Haddad    |     90673.75
+     14881 | Ana Lopez      |      6214.77
+     13572 | Samuel Choi    |      5629.17
+       414 | Nikau Anderson |      4903.24
+     12727 | Rohan Wilson   |      4745.38
+      6147 | Lily Kim       |      4459.37
+      6558 | Tomas Ali      |      4387.82
+      5543 | Aisha Robinson |      4025.80
+     10682 | Rohan Novak    |      3965.63
+     11445 | Minh Bianchi   |      3864.68
+(10 rows)
+
+</code></pre><div class="part-links"><span class="local-material-reference">原始日志 / Raw transcript ↗（原资料留在本地版）</span><span class="local-material-reference">输出截图 / Output screenshots ↗（原资料留在本地版）</span></div></details>
+</div></details><label class="mastery-control"><input data-mastered="A2-1.3.3" type="checkbox"/><span lang="zh-CN">我能解释并独立复现这题</span><span lang="en">I can explain and reproduce this part.</span></label></div>
+</section><div class="source"><strong>概念核对 / Official references</strong> · <a href="https://www.postgresql.org/docs/18/queries-with.html" rel="noopener" target="_blank">CTE 与递归 / CTEs and recursion</a> · <a href="https://www.postgresql.org/docs/18/queries-table-expressions.html" rel="noopener" target="_blank">分组与窗口 / Grouping and window processing</a></div><div class="button-row assignment-actions"><a class="button" href="preparation.html">← 上一单元</a><a class="button" href="index.html">返回专项地图</a><a class="button primary" href="q2.html">下一单元 →</a></div></article></main></div>
+<footer class="site-footer">INFS7903 · SEMESTER 2 / 2026 <span>本地双语资料 · A2 实测复盘更新 2026.10.27</span></footer><div aria-live="polite" id="studio-toast" role="status"></div></body></html>

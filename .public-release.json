@@ -1,0 +1,9 @@
+{
+  "edition": "anonymous-public-v1",
+  "site": "docs",
+  "source_site": "local Study; not bundled",
+  "html_pages": 50,
+  "interactive_labs": 11,
+  "annotated_sql_lines": 265,
+  "sql_files": 20
+}

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="#0a0a0a" name="theme-color"/><meta content="INFS7903 双语离线学习空间：课程讲义、逐题复盘、真实 PostgreSQL 实验与自测。" name="description"/>
+<title>A2 Q3 题意、互动与代码逐行精讲 · INFS7903 Study Studio</title>
+<link href="../../assets/style.css" rel="stylesheet"/><link href="../../assets/studio.css" rel="stylesheet"/>
+<script defer="" src="../../assets/app.js"></script><script defer="" src="../../assets/studio.js"></script><link href="../../assets/a2-labs.css" rel="stylesheet"/><script defer="" src="../../assets/a2-labs.js"></script></head>
+<body data-studio-root="../../"><a class="skip" href="#main">跳到主要内容 / Skip to content</a>
+<header class="topbar"><a class="brand" href="../../index.html"><span class="brand-icon"><svg aria-hidden="true" fill="none" viewbox="0 0 36 36"><ellipse cx="18" cy="9" rx="12" ry="5" stroke="currentColor" stroke-width="1.3"></ellipse><path d="M6 9v9c0 2.8 5.4 5 12 5s12-2.2 12-5V9M6 18v9c0 2.8 5.4 5 12 5s12-2.2 12-5v-9" stroke="currentColor" stroke-width="1.3"></path></svg></span><span>INFS7903<small>STUDY STUDIO / 2026</small></span></a>
+<nav aria-label="主导航" class="main-nav"><a href="../../index.html">学习地图</a><a href="../../chapters/ch01.html">专题讲义</a><a href="../../review/assignments.html">作业复盘</a><a class="a2-nav" href="../../specials/a2/index.html">A2 专项</a><a href="../../review/questions.html">练习与索引</a><a href="../../reports/status.html">资料与下载</a></nav>
+<div class="reading-control"><label for="reading-mode">READING / 阅读</label><select aria-label="阅读语言 / Reading language" data-reading-select="" id="reading-mode"><option value="both">English + 中文</option><option value="en">English only</option><option value="zh">仅中文</option></select></div><button aria-label="打印当前页" class="print-control" data-print="" title="打印当前页 / Print this page">↗</button></header>
+<div class="studio-layout"><aside aria-label="学习路径" class="sidebar"><div class="sidebar-title">COURSE PATH <span>学习路径</span></div>
+<label class="search-label" for="course-search">查找专题或关键词</label><div class="searchbox"><span aria-hidden="true">⌕</span><input autocomplete="off" data-nav-search="" id="course-search" placeholder="B+ 树、MVCC、死锁…" type="search"/></div>
+<nav id="chapter-nav"><a class="chapter-link" data-nav-item="" href="../../chapters/ch01.html"><span class="num">01</span><span><span class="nav-en" lang="en">Relational modelling and normalisation</span><span class="nav-zh" lang="zh-CN">关系模型与规范化</span></span></a><a class="chapter-link" data-nav-item="" href="../../chapters/ch02.html"><span class="num">02</span><span><span class="nav-en" lang="en">SQL reasoning and basic operations</span><span class="nav-zh" lang="zh-CN">SQL 查询思维与基础操作</span></span></a><a class="chapter-link" data-nav-item="" href="../../chapters/ch03.html"><span class="num">03</span><span><span class="nav-en" lang="en">Views and materialised views</span><span class="nav-zh" lang="zh-CN">视图与物化视图</span></span></a><a class="chapter-link" data-nav-item="" href="../../chapters/ch04.html"><span class="num">04</span><span><span class="nav-en" lang="en">Constraints, sequences and triggers</span><span class="nav-zh" lang="zh-CN">完整性约束、序列与触发器</span></span></a><a class="chapter-link" data-nav-item="" href="../../chapters/ch05.html"><span class="num">05</span><span><span class="nav-en" lang="en">Storage organisation and disk calculations</span><span class="nav-zh" lang="zh-CN">存储组织与磁盘计算</span></span></a><a class="chapter-link" data-nav-item="" href="../../chapters/ch06.html"><span class="num">06</span><span><span class="nav-en" lang="en">Indexes and B+ trees</span><span class="nav-zh" lang="zh-CN">索引与 B+ 树</span></span></a><a class="chapter-link" data-nav-item="" href="../../chapters/ch07.html"><span class="num">07</span><span><span class="nav-en" lang="en">Relational algebra and query formulation</span><span class="nav-zh" lang="zh-CN">关系代数与查询表达</span></span></a><a class="chapter-link" data-nav-item="" href="../../chapters/ch08.html"><span class="num">08</span><span><span class="nav-en" lang="en">Query processing and cost models</span><span class="nav-zh" lang="zh-CN">查询处理与成本模型</span></span></a><a class="chapter-link" data-nav-item="" href="../../chapters/ch09.html"><span class="num">09</span><span><span class="nav-en" lang="en">Query optimisation and execution plans</span><span class="nav-zh" lang="zh-CN">查询优化与执行计划</span></span></a><a class="chapter-link" data-nav-item="" href="../../chapters/ch10.html"><span class="num">10</span><span><span class="nav-en" lang="en">Transactions, schedules and correctness</span><span class="nav-zh" lang="zh-CN">事务、调度与正确性</span></span></a><a class="chapter-link" data-nav-item="" href="../../chapters/ch11.html"><span class="num">11</span><span><span class="nav-en" lang="en">Locks, deadlocks and timestamp ordering</span><span class="nav-zh" lang="zh-CN">锁、死锁与时间戳排序</span></span></a><a class="chapter-link" data-nav-item="" href="../../chapters/ch12.html"><span class="num">12</span><span><span class="nav-en" lang="en">Logging, checkpoints and recovery</span><span class="nav-zh" lang="zh-CN">日志、检查点与恢复</span></span></a><a class="chapter-link" data-nav-item="" href="../../chapters/ch13.html"><span class="num">13</span><span><span class="nav-en" lang="en">Integrated practice and SQL extensions</span><span class="nav-zh" lang="zh-CN">综合实践与 SQL 扩展</span></span></a></nav><p class="search-empty" hidden="">没有匹配的专题 / No matching topics</p>
+<div class="sidebar-title special-sidebar-title">SPECIAL STUDY <span>专项学习</span></div><nav aria-label="A2 专项" class="special-sidebar-links"><a data-nav-item="" href="../../specials/a2/index.html">A2 从零开始 · 互动地图</a><a data-nav-item="" href="../../specials/a2/preparation.html">00 · 表与记录 / Start here</a><a data-nav-item="" href="../../specials/a2/q1.html">Q1 · 视图与递归 / Views</a><a data-nav-item="" href="../../specials/a2/q2.html">Q2 · 索引 / Indexes</a><a data-nav-item="" href="../../specials/a2/q3.html">Q3 · 查询计划 / Plans</a><a data-nav-item="" href="../../specials/a2/q4.html">Q4 · 快照与死锁 / Deadlock</a><a data-nav-item="" href="../../specials/a2/teach.html">向老师讲解 · 练习室</a></nav>
+<div class="sidebar-title assignment-sidebar-title">ASSIGNMENTS <span>作业复盘</span></div><nav class="assignment-sidebar-links"><a data-nav-item="" href="../../review/assignments.html#a1">A1 · Constraints / Triggers</a><a data-nav-item="" href="../../review/a2.html">A2 · FleetDB / PostgreSQL <span class="sidebar-dot" title="实测资料已收录"></span></a></nav>
+<div class="sidebar-title">PRACTICE <span>练习与工具</span></div><nav class="utility-links"><a href="../../chapters/practicals.html">Practical 操作指南</a><a href="../../chapters/classroom.html">课堂题与例题</a><a href="../../review/toolkit.html">速查与自测</a><a href="../../review/glossary.html">双语术语表</a><a href="../../complete.html">连续阅读与打印</a><a href="../../reports/sources.html">来源与发布说明</a></nav>
+<div class="sidebar-bottom"><div class="small-label">专题掌握进度</div><strong data-progress-text="">0 / 13</strong><div class="progress-track"><div data-progress-bar=""></div></div><p>读懂后，再闭卷解释一次。</p><div class="button-row"><button class="text-button" data-export-progress="">导出记录</button><label class="text-button" for="import-progress">导入记录</label><input accept="application/json" class="sr-only" data-import-progress="" id="import-progress" type="file"/></div></div></aside>
+<main id="main" tabindex="-1"><aside class="notice public-edition-note">公开学习版 · 互动、中文题意、代码解释与匿名 SQL 可用。课程原件、提交报告及私人档案保留在本地资料版。此站为个人学习笔记，含 AI 辅助内容，并非课程官方答案。</aside><article class="special-lesson"><div class="page-head"><p class="eyebrow">A2 SPECIAL / Q3 / TASK SUMMARY + LINE GUIDE</p><h1><span class="heading-main" lang="zh-CN">反连接与六种扫描计划</span><span class="heading-subtitle" lang="en">Anti-joins and the six scan experiments</span></h1></div><nav aria-label="专项单元" class="special-module-nav"><a href="index.html">专项地图</a><a href="preparation.html">00 · 读懂数据与已有规则</a><a href="q1.html">01 · 视图、窗口排名与递归</a><a href="q2.html">02 · 复合索引与表达式索引</a><a aria-current="page" href="q3.html">03 · 反连接与六种扫描计划</a><a href="q4.html">04 · 双连接、快照与死锁</a></nav><div class="pair"><p lang="zh-CN">本单元包含 3 个小题、69 行解答代码。每题先读中文题意，再展开完整 SQL 与逐行解释，最后用真实输出验证自己的理解。</p><p lang="en">This unit contains 3 task parts and 69 answer-code lines. Read the task summary first, then the full SQL and per-line explanations, and finally compare with genuine output.</p></div><nav aria-label="本单元题目" class="part-jump-nav"><a href="#A2-3.1.1">Q3.1.1</a><a href="#A2-3.1.2">Q3.1.2</a><a href="#A2-3.2">Q3.2</a></nav><div class="button-row assignment-actions"><button data-expand-answers="open">展开本单元解答</button><button data-expand-answers="close">收起解答</button><span class="a2-score">本页掌握 <b data-a2-progress=""></b></span></div><div class="study-method"><div class="pair"><p lang="zh-CN">先证明两种写法语义相同，再比较优化器选出的物理运算；SQL 外形不同不一定计划不同。</p><p lang="en">Establish equivalent semantics before comparing optimizer-selected physical operators.</p></div><div class="pair"><p lang="zh-CN">这是帮助理解查询的逻辑层次；物理计划仍可由优化器重排，不应把书写顺序当作真实执行顺序。</p><p lang="en">This describes logical reasoning, not a mandated physical execution order; the optimizer may choose other physical arrangements.</p></div></div><section class="interactive-first"><div class="section-line"><h2>换写法、换条件，观察工作量<span>TRY FIRST · 再回到题意与每一行代码</span></h2><a href="teach.html">讲解练习室 →</a></div><p class="lab-route-intro">建议先点一次“下一步”，读懂发生的变化；再播放动画、修改参数。最后回答判断题，试着不用看代码解释。</p><section class="a2-lab" data-a2-lab="antijoin" id="lab-antijoin"><p>找不到任何匹配：互动演示正在准备。无需互动也可阅读本页题意和逐行讲解。</p><script type="application/json">{"number": "03A", "lines": [{"href": "q3.html#line-3-1-1-5", "part": "Q3.1.1", "number": 5, "code": "WHERE NOT EXISTS ("}, {"href": "q3.html#line-3-1-1-8", "part": "Q3.1.1", "number": 8, "code": "      AND e.event_type = 'Collect'"}], "note": "教学小数据 / 浏览器模拟；不是新数据库实测。题意、完整 SQL 与实测日志摘录在本页后面的逐题讲义中。"}</script><noscript>开启 JavaScript 可操作动画；本页静态讲义仍可阅读。</noscript></section><section class="a2-lab" data-a2-lab="selectivity" id="lab-selectivity"><p>改变选择率：互动演示正在准备。无需互动也可阅读本页题意和逐行讲解。</p><script type="application/json">{"number": "03B", "lines": [{"href": "q3.html#line-3-2-8", "part": "Q3.2", "number": 8, "code": "EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM BOOKING_EVENTS WHERE event_type \u003c 'Collect';"}], "note": "教学小数据 / 浏览器模拟；不是新数据库实测。题意、完整 SQL 与实测日志摘录在本页后面的逐题讲义中。"}</script><noscript>开启 JavaScript 可操作动画；本页静态讲义仍可阅读。</noscript></section></section><section id="a2-q3"><h2><span class="heading-main" lang="zh-CN">Q3 查询改写与执行计划</span><span class="heading-subtitle" lang="en">Query formulation and plans · 7 marks</span></h2>
+<p class="next"><a href="../../chapters/ch09.html">回到课程专题：查询优化与执行计划 / Related course topic →</a></p>
+<div class="question a2-part" id="A2-3.1.1"><div class="a2-part-head"><h3>Q3.1.1</h3><span class="tag">TASK SUMMARY + LINE GUIDE</span></div>
+
+<div class="task-translation-label">中文题意 / Task in Chinese</div>
+<div class="pair"><p lang="zh-CN">（1.5分）分别用NOT EXISTS与不含NOT EXISTS/NOT IN的方法列从未Collect车辆，两者结果相同。</p><p lang="en">(1.5 marks) List never-Collected vehicle ids with NOT EXISTS and without NOT EXISTS/NOT IN, returning identical rows.</p></div>
+<details><summary>解答、逐行代码与实测依据 / Solution, line guide and evidence</summary><div class="answer-body">
+<div class="pair"><p lang="zh-CN">NOT EXISTS 与 LEFT JOIN 后保留 e.vehicle_id IS NULL 都返回相同的 75 辆车。外连接中的 Collect 条件必须放在 ON 中；若放入 WHERE，会错误丢掉没有匹配的车辆。</p><p lang="en">Both statements return the same 75 vehicle IDs, ordered by vehicle_id. Statement A uses a correlated NOT EXISTS test. Statement B places the Collect predicate in the LEFT JOIN condition and keeps rows with no matching event vehicle_id. The matched-side vehicle_id is NOT NULL in the schema, so NULL identifies an unmatched vehicle unambiguously.</p></div>
+<div class="pair"><p lang="zh-CN">匹配侧的 vehicle_id 在 schema 中非空，因此 NULL 能可靠表示没有匹配。独立的双向 EXCEPT ALL 检查未发现差异；这不是依靠肉眼比较前几行得出的结论。</p><p lang="en">Putting event_type in WHERE instead of ON would remove the unmatched rows and break the outer-join solution. Independent EXCEPT ALL checks in both directions found no differences. The screenshots show the first ten and last ten rows of each 75-row result.</p></div>
+<div class="code-block"><div class="code-label"><span>A2_3.1.1.sql</span><button class="copy-code" data-copy-code="">复制 SQL / Copy SQL</button></div><pre data-language="sql"><code>-- INFS7903 Assignment 2 | Public teaching edition
+-- Statement A
+SELECT v.vehicle_id
+FROM VEHICLES v
+WHERE NOT EXISTS (
+    SELECT 1 FROM BOOKING_EVENTS e
+    WHERE e.vehicle_id = v.vehicle_id
+      AND e.event_type = 'Collect'
+)
+ORDER BY v.vehicle_id;
+-- Statement B
+SELECT v.vehicle_id
+FROM VEHICLES v
+LEFT JOIN BOOKING_EVENTS e
+  ON e.vehicle_id = v.vehicle_id
+ AND e.event_type = 'Collect'
+WHERE e.vehicle_id IS NULL
+ORDER BY v.vehicle_id;
+</code></pre><a class="text-button" download="" href="../../assignments/a2/sql/A2_3.1.1.sql">下载本题 SQL / Download SQL ↗</a></div>
+<details class="line-guide-panel" data-line-guide="3.1.1" open=""><summary>每一行在做什么 / Read every line · 18 行</summary><p class="line-guide-intro">行号与上方代码一致。先读这一行改变了什么，再把它放回整条查询；括号、别名和注释也有说明。</p><ol class="line-guide"><li data-line-number="1" id="line-3-1-1-1"><div class="line-code"><a aria-label="第 1 行" class="line-number" href="#line-3-1-1-1">01</a><code>-- INFS7903 Assignment 2 | Public teaching edition</code></div><div class="pair line-explanation"><p lang="zh-CN">文件说明注释：公开教学版本已移除提交者身份。-- 后直到行末不作为 SQL 执行，不会改变查询或会话；行号仍与下载文件一致。</p><p lang="en">Public-edition header with author identifiers removed. Text after -- is a non-executable comment; line numbers still match the downloadable file.</p></div></li><li data-line-number="2" id="line-3-1-1-2"><div class="line-code"><a aria-label="第 2 行" class="line-number" href="#line-3-1-1-2">02</a><code>-- Statement A</code></div><div class="pair line-explanation"><p lang="zh-CN">注释把接下来的查询标为 Statement A，方便与 B 比较；-- 到行末都不执行。</p><p lang="en">This comment labels Statement A for comparison with B; text following -- is not executed.</p></div></li><li data-line-number="3" id="line-3-1-1-3"><div class="line-code"><a aria-label="第 3 行" class="line-number" href="#line-3-1-1-3">03</a><code>SELECT v.vehicle_id</code></div><div class="pair line-explanation"><p lang="zh-CN">只输出题目要求的车辆编号。查询外层的 v 表示“正在判断是否从未被取用的那辆车”。</p><p lang="en">Return only the required vehicle identifier. Outer alias v is the candidate vehicle whose collection history is being tested.</p></div></li><li data-line-number="4" id="line-3-1-1-4"><div class="line-code"><a aria-label="第 4 行" class="line-number" href="#line-3-1-1-4">04</a><code>FROM VEHICLES v</code></div><div class="pair line-explanation"><p lang="zh-CN">从完整 VEHICLES 表出发，包含没有事件或只有预约/取消事件的车辆。若从 Collect 日志出发，反而找不到“从未出现”的车辆。</p><p lang="en">Start from the entire fleet, including vehicles with no events or only reservations/cancellations. Starting from Collect events would omit the very absences being sought.</p></div></li><li data-line-number="5" id="line-3-1-1-5"><div class="line-code"><a aria-label="第 5 行" class="line-number" href="#line-3-1-1-5">05</a><code>WHERE NOT EXISTS (</code></div><div class="pair line-explanation"><p lang="zh-CN">NOT EXISTS 要求括号内找不到任何匹配行。它回答“是否不存在一次 Collect”，而不是检查车辆的最后一个事件。</p><p lang="en">NOT EXISTS requires no matching inner row. It tests absence of any Collect, not merely the type of the latest event.</p></div></li><li data-line-number="6" id="line-3-1-1-6"><div class="line-code"><a aria-label="第 6 行" class="line-number" href="#line-3-1-1-6">06</a><code>    SELECT 1 FROM BOOKING_EVENTS e</code></div><div class="pair line-explanation"><p lang="zh-CN">SELECT 1 只是为 EXISTS 构造一行；1 的数值没有业务意义，也不是计数。EXISTS 只关心有没有符合条件的行，不关心输出的列值。</p><p lang="en">SELECT 1 supplies an arbitrary value for EXISTS; it is not a count. EXISTS cares only whether a qualifying row exists, not its selected value.</p></div></li><li data-line-number="7" id="line-3-1-1-7"><div class="line-code"><a aria-label="第 7 行" class="line-number" href="#line-3-1-1-7">07</a><code>    WHERE e.vehicle_id = v.vehicle_id</code></div><div class="pair line-explanation"><p lang="zh-CN">只看与外层这辆 v 相同 vehicle_id 的事件，形成相关子查询。如果漏掉相关条件，一辆车被取用就可能让所有候选都被排除。</p><p lang="en">Correlate inner events to the current outer vehicle. Omitting this condition could make one Collect event incorrectly disqualify every candidate.</p></div></li><li data-line-number="8" id="line-3-1-1-8"><div class="line-code"><a aria-label="第 8 行" class="line-number" href="#line-3-1-1-8">08</a><code>      AND e.event_type = 'Collect'</code></div><div class="pair line-explanation"><p lang="zh-CN">还必须是 Collect，其他事件不证明车辆真正被驾驶。只有同车且 Collect 的事件存在时，外层 NOT EXISTS 才为假。</p><p lang="en">Require Collect as well: other events do not prove the car was driven. A same-vehicle Collect makes the outer NOT EXISTS false.</p></div></li><li data-line-number="9" id="line-3-1-1-9"><div class="line-code"><a aria-label="第 9 行" class="line-number" href="#line-3-1-1-9">09</a><code>)</code></div><div class="pair line-explanation"><p lang="zh-CN">关闭 NOT EXISTS 子查询。这个逻辑相关性不强制物理计划逐车完整重扫；优化器可以改写成 anti-join。</p><p lang="en">Close the NOT EXISTS subquery. Logical correlation does not force a full rescan per vehicle; the optimizer can transform it into an anti-join.</p></div></li><li data-line-number="10" id="line-3-1-1-10"><div class="line-code"><a aria-label="第 10 行" class="line-number" href="#line-3-1-1-10">10</a><code>ORDER BY v.vehicle_id;</code></div><div class="pair line-explanation"><p lang="zh-CN">按车辆 ID 排序，便于稳定比对 A 与 B 的全部 75 行，而不是只看前几行。没有 ORDER BY 时，SQL 不保证结果顺序相同。</p><p lang="en">Sort identifiers for stable comparison of all 75 rows from A and B. Without ORDER BY, equal sets need not appear in equal order.</p></div></li><li data-line-number="11" id="line-3-1-1-11"><div class="line-code"><a aria-label="第 11 行" class="line-number" href="#line-3-1-1-11">11</a><code>-- Statement B</code></div><div class="pair line-explanation"><p lang="zh-CN">注释标记 Statement B；它使用外连接表达同一个“没有 Collect”的问题。</p><p lang="en">Label Statement B, which expresses the same absence test using an outer join.</p></div></li><li data-line-number="12" id="line-3-1-1-12"><div class="line-code"><a aria-label="第 12 行" class="line-number" href="#line-3-1-1-12">12</a><code>SELECT v.vehicle_id</code></div><div class="pair line-explanation"><p lang="zh-CN">只输出题目要求的车辆编号。查询外层的 v 表示“正在判断是否从未被取用的那辆车”。</p><p lang="en">Return only the required vehicle identifier. Outer alias v is the candidate vehicle whose collection history is being tested.</p></div></li><li data-line-number="13" id="line-3-1-1-13"><div class="line-code"><a aria-label="第 13 行" class="line-number" href="#line-3-1-1-13">13</a><code>FROM VEHICLES v</code></div><div class="pair line-explanation"><p lang="zh-CN">从完整 VEHICLES 表出发，包含没有事件或只有预约/取消事件的车辆。若从 Collect 日志出发，反而找不到“从未出现”的车辆。</p><p lang="en">Start from the entire fleet, including vehicles with no events or only reservations/cancellations. Starting from Collect events would omit the very absences being sought.</p></div></li><li data-line-number="14" id="line-3-1-1-14"><div class="line-code"><a aria-label="第 14 行" class="line-number" href="#line-3-1-1-14">14</a><code>LEFT JOIN BOOKING_EVENTS e</code></div><div class="pair line-explanation"><p lang="zh-CN">LEFT JOIN 保留左侧的所有车辆。匹配不到右侧事件时，右侧的 e 列会被补成 NULL，为后面的未匹配检查提供依据。</p><p lang="en">LEFT JOIN preserves every vehicle, filling right-side event columns with NULL when no matching event exists.</p></div></li><li data-line-number="15" id="line-3-1-1-15"><div class="line-code"><a aria-label="第 15 行" class="line-number" href="#line-3-1-1-15">15</a><code>  ON e.vehicle_id = v.vehicle_id</code></div><div class="pair line-explanation"><p lang="zh-CN">连接条件先限定事件属于同一辆车。此条件决定哪些事件能和车辆配对，不是在最终结果上检查 NULL。</p><p lang="en">The first ON condition pairs an event with the same vehicle. It defines matches before the later unmatched-row filter.</p></div></li><li data-line-number="16" id="line-3-1-1-16"><div class="line-code"><a aria-label="第 16 行" class="line-number" href="#line-3-1-1-16">16</a><code> AND e.event_type = 'Collect'</code></div><div class="pair line-explanation"><p lang="zh-CN">Collect 条件继续放在 ON 中，只把取车事件视作匹配。若把它移到 WHERE，无匹配行的 e.event_type 为 NULL，会被过滤掉，破坏反连接语义。</p><p lang="en">Keep the Collect predicate inside ON. Moving it to WHERE would discard unmatched rows with NULL event_type and break the anti-join.</p></div></li><li data-line-number="17" id="line-3-1-1-17"><div class="line-code"><a aria-label="第 17 行" class="line-number" href="#line-3-1-1-17">17</a><code>WHERE e.vehicle_id IS NULL</code></div><div class="pair line-explanation"><p lang="zh-CN">e.vehicle_id 在真实事件中 NOT NULL，所以这一列为 NULL 能可靠识别 LEFT JOIN 没有匹配的车辆。匹配过 Collect 的车辆不会通过这个条件。</p><p lang="en">Real event vehicle_id values are NOT NULL, so NULL here reliably identifies an unmatched vehicle. Vehicles having a Collect match fail this condition.</p></div></li><li data-line-number="18" id="line-3-1-1-18"><div class="line-code"><a aria-label="第 18 行" class="line-number" href="#line-3-1-1-18">18</a><code>ORDER BY v.vehicle_id;</code></div><div class="pair line-explanation"><p lang="zh-CN">按车辆 ID 排序，便于稳定比对 A 与 B 的全部 75 行，而不是只看前几行。没有 ORDER BY 时，SQL 不保证结果顺序相同。</p><p lang="en">Sort identifiers for stable comparison of all 75 rows from A and B. Without ORDER BY, equal sets need not appear in equal order.</p></div></li></ol></details>
+<details class="evidence-details"><summary>实际输出 / Captured output · 3.1.1_1</summary><pre class="evidence-output"><code>-- Statement A
+SELECT v.vehicle_id
+FROM VEHICLES v
+WHERE NOT EXISTS (
+    SELECT 1 FROM BOOKING_EVENTS e
+    WHERE e.vehicle_id = v.vehicle_id
+      AND e.event_type = 'Collect'
+)
+ORDER BY v.vehicle_id;
+ vehicle_id 
+------------
+ VEH-0019
+ VEH-0041
+ VEH-0045
+ VEH-0049
+ VEH-0057
+ VEH-0094
+ VEH-0098
+ VEH-0123
+ VEH-0137
+ VEH-0139
+ VEH-0142
+ VEH-0186
+ VEH-0192
+ VEH-0216
+ VEH-0231
+ VEH-0234
+ VEH-0264
+ VEH-0269
+ VEH-0271
+ VEH-0284
+ VEH-0293
+ VEH-0317
+ VEH-0319
+ VEH-0328
+ VEH-0331
+ VEH-0342
+ VEH-0346
+ VEH-0347
+ VEH-0350
+ VEH-0362
+ VEH-0373
+ VEH-0374
+ VEH-0383
+ VEH-0406
+ VEH-0425
+ VEH-0433
+ VEH-0439
+ VEH-0441
+ VEH-0442
+ VEH-0446
+ VEH-0464
+ VEH-0482
+ VEH-0506
+ VEH-0518
+ VEH-0519
+ VEH-0525
+ VEH-0534
+ VEH-0540
+ VEH-0576
+ VEH-0584
+ VEH-0587
+ VEH-0603
+ VEH-0614
+ VEH-0648
+ VEH-0650
+ VEH-0665
+ VEH-0698
+ VEH-0709
+ VEH-0714
+ VEH-0731
+ VEH-0744
+ VEH-0751
+ VEH-0771
+ VEH-0778
+ VEH-0801
+ VEH-0820
+ VEH-0826
+ VEH-0845
+ VEH-0857
+ VEH-0860
+ VEH-0861
+ VEH-0874
+ VEH-0881
+ VEH-0882
+ VEH-0891
+(75 rows)
+
+</code></pre><div class="part-links"><span class="local-material-reference">原始日志 / Raw transcript ↗（原资料留在本地版）</span><span class="local-material-reference">输出截图 / Output screenshots ↗（原资料留在本地版）</span></div></details>
+<details class="evidence-details"><summary>实际输出 / Captured output · 3.1.1_2</summary><pre class="evidence-output"><code>-- Statement B
+SELECT v.vehicle_id
+FROM VEHICLES v
+LEFT JOIN BOOKING_EVENTS e
+  ON e.vehicle_id = v.vehicle_id
+ AND e.event_type = 'Collect'
+WHERE e.vehicle_id IS NULL
+ORDER BY v.vehicle_id;
+ vehicle_id 
+------------
+ VEH-0019
+ VEH-0041
+ VEH-0045
+ VEH-0049
+ VEH-0057
+ VEH-0094
+ VEH-0098
+ VEH-0123
+ VEH-0137
+ VEH-0139
+ VEH-0142
+ VEH-0186
+ VEH-0192
+ VEH-0216
+ VEH-0231
+ VEH-0234
+ VEH-0264
+ VEH-0269
+ VEH-0271
+ VEH-0284
+ VEH-0293
+ VEH-0317
+ VEH-0319
+ VEH-0328
+ VEH-0331
+ VEH-0342
+ VEH-0346
+ VEH-0347
+ VEH-0350
+ VEH-0362
+ VEH-0373
+ VEH-0374
+ VEH-0383
+ VEH-0406
+ VEH-0425
+ VEH-0433
+ VEH-0439
+ VEH-0441
+ VEH-0442
+ VEH-0446
+ VEH-0464
+ VEH-0482
+ VEH-0506
+ VEH-0518
+ VEH-0519
+ VEH-0525
+ VEH-0534
+ VEH-0540
+ VEH-0576
+ VEH-0584
+ VEH-0587
+ VEH-0603
+ VEH-0614
+ VEH-0648
+ VEH-0650
+ VEH-0665
+ VEH-0698
+ VEH-0709
+ VEH-0714
+ VEH-0731
+ VEH-0744
+ VEH-0751
+ VEH-0771
+ VEH-0778
+ VEH-0801
+ VEH-0820
+ VEH-0826
+ VEH-0845
+ VEH-0857
+ VEH-0860
+ VEH-0861
+ VEH-0874
+ VEH-0881
+ VEH-0882
+ VEH-0891
+(75 rows)
+
+</code></pre><div class="part-links"><span class="local-material-reference">原始日志 / Raw transcript ↗（原资料留在本地版）</span><span class="local-material-reference">输出截图 / Output screenshots ↗（原资料留在本地版）</span></div></details>
+</div></details><label class="mastery-control"><input data-mastered="A2-3.1.1" type="checkbox"/><span lang="zh-CN">我能解释并独立复现这题</span><span lang="en">I can explain and reproduce this part.</span></label></div>
+<div class="question a2-part" id="A2-3.1.2"><div class="a2-part-head"><h3>Q3.1.2</h3><span class="tag">TASK SUMMARY + LINE GUIDE</span></div>
+
+<div class="task-translation-label">中文题意 / Task in Chinese</div>
+<div class="pair"><p lang="zh-CN">（1.5分）比较两个查询计划，解释反连接改写。</p><p lang="en">(1.5 marks) Compare both execution plans and explain any anti-join transformation.</p></div>
+<details><summary>解答、逐行代码与实测依据 / Solution, line guide and evidence</summary><div class="answer-body">
+<div class="pair"><p lang="zh-CN">两种写法得到相同的 Hash Right Anti Join 和最终排序，cost 都为 4579.18..4579.30；估计 48 行，实际 75 行。执行时间分别为 12.788 和 12.558 ms。</p><p lang="en">The two plans have the same operator structure and cost 4579.18..4579.30. Both return 75 rows, versus 48 estimated, using Hash Right Anti Join and a final vehicle_id sort. Statement A takes 12.788 ms and Statement B 12.558 ms in these runs.</p></div>
+<div class="pair"><p lang="zh-CN">优化器把 NOT EXISTS 去相关，并识别外连接的 NULL 检查为相同 anti-join。它对 900 辆车建 hash，经 bitmap 路径处理 59,539 条 Collect。Right 表示物理输入方向，不改变“保留从未取车的车辆”语义；不是为每辆车重扫整张日志。</p><p lang="en">PostgreSQL decorrelates NOT EXISTS and recognizes the outer-join NULL filter as the same anti-join operation. It hashes the small set of 900 vehicles and scans 59,539 Collect events through a bitmap index/heap path, keeping the vehicle rows without any match. The Right direction describes the physical join inputs chosen by the optimizer; it preserves the intended vehicle-side anti-join semantics. Neither syntax forces a separate full event scan for each vehicle. The minor time difference does not establish a consistent performance difference.</p></div>
+<div class="code-block"><div class="code-label"><span>A2_3.1.2.sql</span><button class="copy-code" data-copy-code="">复制 SQL / Copy SQL</button></div><pre data-language="sql"><code>-- INFS7903 Assignment 2 | Public teaching edition
+-- Statement A
+EXPLAIN (ANALYZE, BUFFERS) SELECT v.vehicle_id
+FROM VEHICLES v
+WHERE NOT EXISTS (
+    SELECT 1 FROM BOOKING_EVENTS e
+    WHERE e.vehicle_id = v.vehicle_id
+      AND e.event_type = 'Collect'
+)
+ORDER BY v.vehicle_id;
+-- Statement B
+EXPLAIN (ANALYZE, BUFFERS) SELECT v.vehicle_id
+FROM VEHICLES v
+LEFT JOIN BOOKING_EVENTS e
+  ON e.vehicle_id = v.vehicle_id
+ AND e.event_type = 'Collect'
+WHERE e.vehicle_id IS NULL
+ORDER BY v.vehicle_id;
+</code></pre><a class="text-button" download="" href="../../assignments/a2/sql/A2_3.1.2.sql">下载本题 SQL / Download SQL ↗</a></div>
+<details class="line-guide-panel" data-line-guide="3.1.2" open=""><summary>每一行在做什么 / Read every line · 18 行</summary><p class="line-guide-intro">行号与上方代码一致。先读这一行改变了什么，再把它放回整条查询；括号、别名和注释也有说明。</p><ol class="line-guide"><li data-line-number="1" id="line-3-1-2-1"><div class="line-code"><a aria-label="第 1 行" class="line-number" href="#line-3-1-2-1">01</a><code>-- INFS7903 Assignment 2 | Public teaching edition</code></div><div class="pair line-explanation"><p lang="zh-CN">文件说明注释：公开教学版本已移除提交者身份。-- 后直到行末不作为 SQL 执行，不会改变查询或会话；行号仍与下载文件一致。</p><p lang="en">Public-edition header with author identifiers removed. Text after -- is a non-executable comment; line numbers still match the downloadable file.</p></div></li><li data-line-number="2" id="line-3-1-2-2"><div class="line-code"><a aria-label="第 2 行" class="line-number" href="#line-3-1-2-2">02</a><code>-- Statement A</code></div><div class="pair line-explanation"><p lang="zh-CN">注释把接下来的查询标为 Statement A，方便与 B 比较；-- 到行末都不执行。</p><p lang="en">This comment labels Statement A for comparison with B; text following -- is not executed.</p></div></li><li data-line-number="3" id="line-3-1-2-3"><div class="line-code"><a aria-label="第 3 行" class="line-number" href="#line-3-1-2-3">03</a><code>EXPLAIN (ANALYZE, BUFFERS) SELECT v.vehicle_id</code></div><div class="pair line-explanation"><p lang="zh-CN">EXPLAIN 显示“Statement A: NOT EXISTS”的物理执行计划；ANALYZE 会真正运行该查询并记录实际耗时、行数与 loops，BUFFERS 增加缓冲页访问统计。这里不逐行打印普通查询结果；cost 是估计单位，不能直接当毫秒，也不能把父子节点时间简单相加。</p><p lang="en">EXPLAIN shows the physical plan for Statement A: NOT EXISTS. ANALYZE really executes it and records actual timing, rows and loops; BUFFERS adds page-access statistics. It does not return ordinary result tuples, cost is not milliseconds, and parent/child timings must not simply be summed.</p></div></li><li data-line-number="4" id="line-3-1-2-4"><div class="line-code"><a aria-label="第 4 行" class="line-number" href="#line-3-1-2-4">04</a><code>FROM VEHICLES v</code></div><div class="pair line-explanation"><p lang="zh-CN">从完整 VEHICLES 表出发，包含没有事件或只有预约/取消事件的车辆。若从 Collect 日志出发，反而找不到“从未出现”的车辆。</p><p lang="en">Start from the entire fleet, including vehicles with no events or only reservations/cancellations. Starting from Collect events would omit the very absences being sought.</p></div></li><li data-line-number="5" id="line-3-1-2-5"><div class="line-code"><a aria-label="第 5 行" class="line-number" href="#line-3-1-2-5">05</a><code>WHERE NOT EXISTS (</code></div><div class="pair line-explanation"><p lang="zh-CN">NOT EXISTS 要求括号内找不到任何匹配行。它回答“是否不存在一次 Collect”，而不是检查车辆的最后一个事件。</p><p lang="en">NOT EXISTS requires no matching inner row. It tests absence of any Collect, not merely the type of the latest event.</p></div></li><li data-line-number="6" id="line-3-1-2-6"><div class="line-code"><a aria-label="第 6 行" class="line-number" href="#line-3-1-2-6">06</a><code>    SELECT 1 FROM BOOKING_EVENTS e</code></div><div class="pair line-explanation"><p lang="zh-CN">SELECT 1 只是为 EXISTS 构造一行；1 的数值没有业务意义，也不是计数。EXISTS 只关心有没有符合条件的行，不关心输出的列值。</p><p lang="en">SELECT 1 supplies an arbitrary value for EXISTS; it is not a count. EXISTS cares only whether a qualifying row exists, not its selected value.</p></div></li><li data-line-number="7" id="line-3-1-2-7"><div class="line-code"><a aria-label="第 7 行" class="line-number" href="#line-3-1-2-7">07</a><code>    WHERE e.vehicle_id = v.vehicle_id</code></div><div class="pair line-explanation"><p lang="zh-CN">只看与外层这辆 v 相同 vehicle_id 的事件，形成相关子查询。如果漏掉相关条件，一辆车被取用就可能让所有候选都被排除。</p><p lang="en">Correlate inner events to the current outer vehicle. Omitting this condition could make one Collect event incorrectly disqualify every candidate.</p></div></li><li data-line-number="8" id="line-3-1-2-8"><div class="line-code"><a aria-label="第 8 行" class="line-number" href="#line-3-1-2-8">08</a><code>      AND e.event_type = 'Collect'</code></div><div class="pair line-explanation"><p lang="zh-CN">还必须是 Collect，其他事件不证明车辆真正被驾驶。只有同车且 Collect 的事件存在时，外层 NOT EXISTS 才为假。</p><p lang="en">Require Collect as well: other events do not prove the car was driven. A same-vehicle Collect makes the outer NOT EXISTS false.</p></div></li><li data-line-number="9" id="line-3-1-2-9"><div class="line-code"><a aria-label="第 9 行" class="line-number" href="#line-3-1-2-9">09</a><code>)</code></div><div class="pair line-explanation"><p lang="zh-CN">关闭 NOT EXISTS 子查询。这个逻辑相关性不强制物理计划逐车完整重扫；优化器可以改写成 anti-join。</p><p lang="en">Close the NOT EXISTS subquery. Logical correlation does not force a full rescan per vehicle; the optimizer can transform it into an anti-join.</p></div></li><li data-line-number="10" id="line-3-1-2-10"><div class="line-code"><a aria-label="第 10 行" class="line-number" href="#line-3-1-2-10">10</a><code>ORDER BY v.vehicle_id;</code></div><div class="pair line-explanation"><p lang="zh-CN">按车辆 ID 排序，便于稳定比对 A 与 B 的全部 75 行，而不是只看前几行。没有 ORDER BY 时，SQL 不保证结果顺序相同。</p><p lang="en">Sort identifiers for stable comparison of all 75 rows from A and B. Without ORDER BY, equal sets need not appear in equal order.</p></div></li><li data-line-number="11" id="line-3-1-2-11"><div class="line-code"><a aria-label="第 11 行" class="line-number" href="#line-3-1-2-11">11</a><code>-- Statement B</code></div><div class="pair line-explanation"><p lang="zh-CN">注释标记 Statement B；它使用外连接表达同一个“没有 Collect”的问题。</p><p lang="en">Label Statement B, which expresses the same absence test using an outer join.</p></div></li><li data-line-number="12" id="line-3-1-2-12"><div class="line-code"><a aria-label="第 12 行" class="line-number" href="#line-3-1-2-12">12</a><code>EXPLAIN (ANALYZE, BUFFERS) SELECT v.vehicle_id</code></div><div class="pair line-explanation"><p lang="zh-CN">EXPLAIN 显示“Statement B: LEFT JOIN with an unmatched-row test”的物理执行计划；ANALYZE 会真正运行该查询并记录实际耗时、行数与 loops，BUFFERS 增加缓冲页访问统计。这里不逐行打印普通查询结果；cost 是估计单位，不能直接当毫秒，也不能把父子节点时间简单相加。</p><p lang="en">EXPLAIN shows the physical plan for Statement B: LEFT JOIN with an unmatched-row test. ANALYZE really executes it and records actual timing, rows and loops; BUFFERS adds page-access statistics. It does not return ordinary result tuples, cost is not milliseconds, and parent/child timings must not simply be summed.</p></div></li><li data-line-number="13" id="line-3-1-2-13"><div class="line-code"><a aria-label="第 13 行" class="line-number" href="#line-3-1-2-13">13</a><code>FROM VEHICLES v</code></div><div class="pair line-explanation"><p lang="zh-CN">从完整 VEHICLES 表出发，包含没有事件或只有预约/取消事件的车辆。若从 Collect 日志出发，反而找不到“从未出现”的车辆。</p><p lang="en">Start from the entire fleet, including vehicles with no events or only reservations/cancellations. Starting from Collect events would omit the very absences being sought.</p></div></li><li data-line-number="14" id="line-3-1-2-14"><div class="line-code"><a aria-label="第 14 行" class="line-number" href="#line-3-1-2-14">14</a><code>LEFT JOIN BOOKING_EVENTS e</code></div><div class="pair line-explanation"><p lang="zh-CN">LEFT JOIN 保留左侧的所有车辆。匹配不到右侧事件时，右侧的 e 列会被补成 NULL，为后面的未匹配检查提供依据。</p><p lang="en">LEFT JOIN preserves every vehicle, filling right-side event columns with NULL when no matching event exists.</p></div></li><li data-line-number="15" id="line-3-1-2-15"><div class="line-code"><a aria-label="第 15 行" class="line-number" href="#line-3-1-2-15">15</a><code>  ON e.vehicle_id = v.vehicle_id</code></div><div class="pair line-explanation"><p lang="zh-CN">连接条件先限定事件属于同一辆车。此条件决定哪些事件能和车辆配对，不是在最终结果上检查 NULL。</p><p lang="en">The first ON condition pairs an event with the same vehicle. It defines matches before the later unmatched-row filter.</p></div></li><li data-line-number="16" id="line-3-1-2-16"><div class="line-code"><a aria-label="第 16 行" class="line-number" href="#line-3-1-2-16">16</a><code> AND e.event_type = 'Collect'</code></div><div class="pair line-explanation"><p lang="zh-CN">Collect 条件继续放在 ON 中，只把取车事件视作匹配。若把它移到 WHERE，无匹配行的 e.event_type 为 NULL，会被过滤掉，破坏反连接语义。</p><p lang="en">Keep the Collect predicate inside ON. Moving it to WHERE would discard unmatched rows with NULL event_type and break the anti-join.</p></div></li><li data-line-number="17" id="line-3-1-2-17"><div class="line-code"><a aria-label="第 17 行" class="line-number" href="#line-3-1-2-17">17</a><code>WHERE e.vehicle_id IS NULL</code></div><div class="pair line-explanation"><p lang="zh-CN">e.vehicle_id 在真实事件中 NOT NULL，所以这一列为 NULL 能可靠识别 LEFT JOIN 没有匹配的车辆。匹配过 Collect 的车辆不会通过这个条件。</p><p lang="en">Real event vehicle_id values are NOT NULL, so NULL here reliably identifies an unmatched vehicle. Vehicles having a Collect match fail this condition.</p></div></li><li data-line-number="18" id="line-3-1-2-18"><div class="line-code"><a aria-label="第 18 行" class="line-number" href="#line-3-1-2-18">18</a><code>ORDER BY v.vehicle_id;</code></div><div class="pair line-explanation"><p lang="zh-CN">按车辆 ID 排序，便于稳定比对 A 与 B 的全部 75 行，而不是只看前几行。没有 ORDER BY 时，SQL 不保证结果顺序相同。</p><p lang="en">Sort identifiers for stable comparison of all 75 rows from A and B. Without ORDER BY, equal sets need not appear in equal order.</p></div></li></ol></details>
+<details class="evidence-details"><summary>完整执行计划 / Full query plan · 3.1.2_1</summary><pre class="evidence-output"><code>-- Statement A
+EXPLAIN (ANALYZE, BUFFERS) SELECT v.vehicle_id
+FROM VEHICLES v
+WHERE NOT EXISTS (
+    SELECT 1 FROM BOOKING_EVENTS e
+    WHERE e.vehicle_id = v.vehicle_id
+      AND e.event_type = 'Collect'
+)
+ORDER BY v.vehicle_id;
+                                                                      QUERY PLAN                                                                      
+------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=4579.18..4579.30 rows=48 width=9) (actual time=12.704..12.707 rows=75.00 loops=1)
+   Sort Key: v.vehicle_id
+   Sort Method: quicksort  Memory: 25kB
+   Buffers: shared hit=1877
+   -&gt;  Hash Right Anti Join  (cost=1413.37..4577.84 rows=48 width=9) (actual time=12.659..12.670 rows=75.00 loops=1)
+         Hash Cond: ((e.vehicle_id)::text = (v.vehicle_id)::text)
+         Buffers: shared hit=1874
+         -&gt;  Bitmap Heap Scan on booking_events e  (cost=1386.12..3766.79 rows=59574 width=9) (actual time=1.465..8.881 rows=59539.00 loops=1)
+               Recheck Cond: ((event_type)::text = 'Collect'::text)
+               Heap Blocks: exact=1636
+               Buffers: shared hit=1867
+               -&gt;  Bitmap Index Scan on idx_event_type_time  (cost=0.00..1371.23 rows=59574 width=0) (actual time=1.360..1.360 rows=59539.00 loops=1)
+                     Index Cond: ((event_type)::text = 'Collect'::text)
+                     Index Searches: 1
+                     Buffers: shared hit=231
+         -&gt;  Hash  (cost=16.00..16.00 rows=900 width=9) (actual time=0.099..0.100 rows=900.00 loops=1)
+               Buckets: 1024  Batches: 1  Memory Usage: 45kB
+               Buffers: shared hit=7
+               -&gt;  Seq Scan on vehicles v  (cost=0.00..16.00 rows=900 width=9) (actual time=0.010..0.050 rows=900.00 loops=1)
+                     Buffers: shared hit=7
+ Planning:
+   Buffers: shared hit=233
+ Planning Time: 2.249 ms
+ Execution Time: 12.788 ms
+(24 rows)
+
+</code></pre><div class="part-links"><span class="local-material-reference">原始日志 / Raw transcript ↗（原资料留在本地版）</span><span class="local-material-reference">输出截图 / Output screenshots ↗（原资料留在本地版）</span></div></details>
+<details class="evidence-details"><summary>完整执行计划 / Full query plan · 3.1.2_2</summary><pre class="evidence-output"><code>-- Statement B
+EXPLAIN (ANALYZE, BUFFERS) SELECT v.vehicle_id
+FROM VEHICLES v
+LEFT JOIN BOOKING_EVENTS e
+  ON e.vehicle_id = v.vehicle_id
+ AND e.event_type = 'Collect'
+WHERE e.vehicle_id IS NULL
+ORDER BY v.vehicle_id;
+                                                                      QUERY PLAN                                                                      
+------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=4579.18..4579.30 rows=48 width=9) (actual time=12.478..12.482 rows=75.00 loops=1)
+   Sort Key: v.vehicle_id
+   Sort Method: quicksort  Memory: 25kB
+   Buffers: shared hit=1877
+   -&gt;  Hash Right Anti Join  (cost=1413.37..4577.84 rows=48 width=9) (actual time=12.438..12.448 rows=75.00 loops=1)
+         Hash Cond: ((e.vehicle_id)::text = (v.vehicle_id)::text)
+         Buffers: shared hit=1874
+         -&gt;  Bitmap Heap Scan on booking_events e  (cost=1386.12..3766.79 rows=59574 width=9) (actual time=1.413..8.671 rows=59539.00 loops=1)
+               Recheck Cond: ((event_type)::text = 'Collect'::text)
+               Heap Blocks: exact=1636
+               Buffers: shared hit=1867
+               -&gt;  Bitmap Index Scan on idx_event_type_time  (cost=0.00..1371.23 rows=59574 width=0) (actual time=1.318..1.318 rows=59539.00 loops=1)
+                     Index Cond: ((event_type)::text = 'Collect'::text)
+                     Index Searches: 1
+                     Buffers: shared hit=231
+         -&gt;  Hash  (cost=16.00..16.00 rows=900 width=9) (actual time=0.101..0.102 rows=900.00 loops=1)
+               Buckets: 1024  Batches: 1  Memory Usage: 45kB
+               Buffers: shared hit=7
+               -&gt;  Seq Scan on vehicles v  (cost=0.00..16.00 rows=900 width=9) (actual time=0.010..0.052 rows=900.00 loops=1)
+                     Buffers: shared hit=7
+ Planning:
+   Buffers: shared hit=233
+ Planning Time: 2.697 ms
+ Execution Time: 12.558 ms
+(24 rows)
+
+</code></pre><div class="part-links"><span class="local-material-reference">原始日志 / Raw transcript ↗（原资料留在本地版）</span><span class="local-material-reference">输出截图 / Output screenshots ↗（原资料留在本地版）</span></div></details>
+</div></details><label class="mastery-control"><input data-mastered="A2-3.1.2" type="checkbox"/><span lang="zh-CN">我能解释并独立复现这题</span><span lang="en">I can explain and reproduce this part.</span></label></div>
+<div class="question a2-part" id="A2-3.2"><div class="a2-part-head"><h3>Q3.2</h3><span class="tag">TASK SUMMARY + LINE GUIDE</span></div>
+
+<div class="task-translation-label">中文题意 / Task in Chinese</div>
+<div class="pair"><p lang="zh-CN">（4分）对C:event_type&lt;Collect和D:event_type&gt;=Collect，在三组扫描设置下解释最多六计划，最后恢复全部扫描选项。</p><p lang="en">(4 marks) Explain C:event_type&lt;Collect and D:event_type&gt;=Collect under three scan settings; include index, bitmap, index-only flags and reset all.</p></div>
+<details><summary>解答、逐行代码与实测依据 / Solution, line guide and evidence</summary><div class="answer-body">
+<div class="pair"><p lang="zh-CN">本阶段共有 196,441 条事件。测试库 C collation 下，C 只匹配 Cancel：8,158 行（4.15%）；D 匹配其余 188,283 行（95.85%）。二者只改比较方向，却改变了选择率。</p><p lang="en">There are 196,441 events at this stage. Under the test database C collation, C selects only Cancel: 8,158 rows (4.15%). D selects the other 188,283 rows (95.85%). Reversing the inequality changes selectivity.</p></div>
+<div class="pair"><p lang="zh-CN">Bitmap Scan 先从索引取位置，再按 heap 页批量访问。对 C，保留索引时 cost 1,910.62；禁止索引后只能顺序扫，cost 4,091.51。对 D，正常顺序扫 cost 4,091.51；抑制顺序扫后 bitmap 要处理几乎所有行和全部 1,636 个 heap blocks，cost 增至 8,384.15。本次时间见下表，缓存会影响不同运行；四个开关最后都恢复 on。</p><p lang="en">Bitmap access first finds index locations and then batches heap-page visits. For C the permitted bitmap path costs 1,910.62; suppressing all index paths yields a sequential scan costing 4,091.51. For D the normal sequential scan costs 4,091.51, whereas suppressing it forces a bitmap path costing 8,384.15 and visiting all 1,636 heap blocks. Times in the table are individual observations affected by cache state. All four switches are restored to on.</p></div>
+<div class="table-wrap"><table><thead><tr><th>设置 / Setting</th><th>Query</th><th>Scan</th><th>Actual rows</th><th>Total cost</th><th>Time ms</th></tr></thead><tbody><tr><td>1 · All on</td><td>C</td><td>Bitmap heap + index</td><td>8,158</td><td>1,910.62</td><td>4.667</td></tr><tr><td>1 · All on</td><td>D</td><td>Sequential scan</td><td>188,283</td><td>4,091.51</td><td>14.145</td></tr><tr><td>2 · Seq off</td><td>C</td><td>Bitmap heap + index</td><td>8,158</td><td>1,910.62</td><td>2.242</td></tr><tr><td>2 · Seq off</td><td>D</td><td>Bitmap heap + index</td><td>188,283</td><td>8,384.15</td><td>17.270</td></tr><tr><td>3 · Index paths off</td><td>C</td><td>Sequential scan</td><td>8,158</td><td>4,091.51</td><td>7.886</td></tr><tr><td>3 · Index paths off</td><td>D</td><td>Sequential scan</td><td>188,283</td><td>4,091.51</td><td>13.995</td></tr></tbody></table></div>
+<div class="code-block"><div class="code-label"><span>A2_3.2.sql</span><button class="copy-code" data-copy-code="">复制 SQL / Copy SQL</button></div><pre data-language="sql"><code>-- INFS7903 Assignment 2 | Public teaching edition
+-- Setting 1: index scans enabled; sequential scans enabled.
+SET enable_indexscan = on;
+SET enable_indexonlyscan = on;
+SET enable_bitmapscan = on;
+SET enable_seqscan = on;
+-- Query C
+EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM BOOKING_EVENTS WHERE event_type &lt; 'Collect';
+-- Query D
+EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM BOOKING_EVENTS WHERE event_type &gt;= 'Collect';
+-- Setting 2: index scans enabled; sequential scans suppressed.
+SET enable_indexscan = on;
+SET enable_indexonlyscan = on;
+SET enable_bitmapscan = on;
+SET enable_seqscan = off;
+-- Query C
+EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM BOOKING_EVENTS WHERE event_type &lt; 'Collect';
+-- Query D
+EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM BOOKING_EVENTS WHERE event_type &gt;= 'Collect';
+-- Setting 3: index scans suppressed; sequential scans enabled.
+SET enable_indexscan = off;
+SET enable_indexonlyscan = off;
+SET enable_bitmapscan = off;
+SET enable_seqscan = on;
+-- Query C
+EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM BOOKING_EVENTS WHERE event_type &lt; 'Collect';
+-- Query D
+EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM BOOKING_EVENTS WHERE event_type &gt;= 'Collect';
+-- Restore all four scan settings.
+SET enable_indexscan = on;
+SET enable_indexonlyscan = on;
+SET enable_bitmapscan = on;
+SET enable_seqscan = on;
+</code></pre><a class="text-button" download="" href="../../assignments/a2/sql/A2_3.2.sql">下载本题 SQL / Download SQL ↗</a></div>
+<details class="line-guide-panel" data-line-guide="3.2" open=""><summary>每一行在做什么 / Read every line · 33 行</summary><p class="line-guide-intro">行号与上方代码一致。先读这一行改变了什么，再把它放回整条查询；括号、别名和注释也有说明。</p><ol class="line-guide"><li data-line-number="1" id="line-3-2-1"><div class="line-code"><a aria-label="第 1 行" class="line-number" href="#line-3-2-1">01</a><code>-- INFS7903 Assignment 2 | Public teaching edition</code></div><div class="pair line-explanation"><p lang="zh-CN">文件说明注释：公开教学版本已移除提交者身份。-- 后直到行末不作为 SQL 执行，不会改变查询或会话；行号仍与下载文件一致。</p><p lang="en">Public-edition header with author identifiers removed. Text after -- is a non-executable comment; line numbers still match the downloadable file.</p></div></li><li data-line-number="2" id="line-3-2-2"><div class="line-code"><a aria-label="第 2 行" class="line-number" href="#line-3-2-2">02</a><code>-- Setting 1: index scans enabled; sequential scans enabled.</code></div><div class="pair line-explanation"><p lang="zh-CN">本段是第 1 组访问方法设置；注释只标记实验阶段，真正改变规划器选项的是下面四条 SET。同一文件必须在同一连接中执行，才能让设置影响后面的 EXPLAIN。</p><p lang="en">Label scan-setting group 1. The following SET commands, not the comment, change planner options; run the file within one connection.</p></div></li><li data-line-number="3" id="line-3-2-3"><div class="line-code"><a aria-label="第 3 行" class="line-number" href="#line-3-2-3">03</a><code>SET enable_indexscan = on;</code></div><div class="pair line-explanation"><p lang="zh-CN">enable_indexscan 控制普通 Index Scan 路径，也会影响 index-only 路径能否被考虑。本行设为 on，作用于当前会话后续语句，不修改表内容；三种索引相关开关要一起处理，才符合本题定义。</p><p lang="en">Set enable_indexscan to on for subsequent statements in this session: ordinary index scans, also required when considering index-only scans. This changes planner options, not table data.</p></div></li><li data-line-number="4" id="line-3-2-4"><div class="line-code"><a aria-label="第 4 行" class="line-number" href="#line-3-2-4">04</a><code>SET enable_indexonlyscan = on;</code></div><div class="pair line-explanation"><p lang="zh-CN">enable_indexonlyscan 控制Index Only Scan 路径；它还要求普通 index scan 被允许，并满足覆盖列等条件。本行设为 on，作用于当前会话后续语句，不修改表内容；三种索引相关开关要一起处理，才符合本题定义。</p><p lang="en">Set enable_indexonlyscan to on for subsequent statements in this session: index-only scans, which additionally require ordinary index scans and suitable coverage. This changes planner options, not table data.</p></div></li><li data-line-number="5" id="line-3-2-5"><div class="line-code"><a aria-label="第 5 行" class="line-number" href="#line-3-2-5">05</a><code>SET enable_bitmapscan = on;</code></div><div class="pair line-explanation"><p lang="zh-CN">enable_bitmapscan 控制Bitmap Index/Heap Scan 路径；只关普通 Index Scan 并不会连带关闭它。本行设为 on，作用于当前会话后续语句，不修改表内容；三种索引相关开关要一起处理，才符合本题定义。</p><p lang="en">Set enable_bitmapscan to on for subsequent statements in this session: bitmap access, which is not disabled merely by turning off ordinary index scans. This changes planner options, not table data.</p></div></li><li data-line-number="6" id="line-3-2-6"><div class="line-code"><a aria-label="第 6 行" class="line-number" href="#line-3-2-6">06</a><code>SET enable_seqscan = on;</code></div><div class="pair line-explanation"><p lang="zh-CN">enable_seqscan 控制Sequential Scan 路径；off 是抑制，并非保证任何情况下都绝对不会出现。本行设为 on，作用于当前会话后续语句，不修改表内容；三种索引相关开关要一起处理，才符合本题定义。</p><p lang="en">Set enable_seqscan to on for subsequent statements in this session: sequential scans; off discourages this method rather than guaranteeing its absence in every possible query. This changes planner options, not table data.</p></div></li><li data-line-number="7" id="line-3-2-7"><div class="line-code"><a aria-label="第 7 行" class="line-number" href="#line-3-2-7">07</a><code>-- Query C</code></div><div class="pair line-explanation"><p lang="zh-CN">标记接下来研究 Query C。注释本身不执行查询，结果应与同一设置组的另一条查询比较。</p><p lang="en">Label Query C; compare its plan with the other query under the same settings.</p></div></li><li data-line-number="8" id="line-3-2-8"><div class="line-code"><a aria-label="第 8 行" class="line-number" href="#line-3-2-8">08</a><code>EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM BOOKING_EVENTS WHERE event_type &lt; 'Collect';</code></div><div class="pair line-explanation"><p lang="zh-CN">EXPLAIN (ANALYZE, BUFFERS) 实际执行 Query C，SELECT * 需要整行事件。比较 event_type 小于字符串 Collect，是按数据库排序规则比较文字，不是比较事件发生先后；C collation 下匹配 8,158 行。本组实测用 Bitmap Heap Scan，数字和完整计划在后面的证据中。</p><p lang="en">Execute and explain Query C, projecting complete event rows. Its text comparison with Collect follows database collation, not event chronology. It matches 8,158 rows under C collation; this setting produced Bitmap Heap Scan in the recorded run.</p></div></li><li data-line-number="9" id="line-3-2-9"><div class="line-code"><a aria-label="第 9 行" class="line-number" href="#line-3-2-9">09</a><code>-- Query D</code></div><div class="pair line-explanation"><p lang="zh-CN">标记接下来研究 Query D。注释本身不执行查询，结果应与同一设置组的另一条查询比较。</p><p lang="en">Label Query D; compare its plan with the other query under the same settings.</p></div></li><li data-line-number="10" id="line-3-2-10"><div class="line-code"><a aria-label="第 10 行" class="line-number" href="#line-3-2-10">10</a><code>EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM BOOKING_EVENTS WHERE event_type &gt;= 'Collect';</code></div><div class="pair line-explanation"><p lang="zh-CN">EXPLAIN (ANALYZE, BUFFERS) 实际执行 Query D，SELECT * 需要整行事件。比较 event_type 大于等于字符串 Collect，是按数据库排序规则比较文字，不是比较事件发生先后；C collation 下匹配 188,283 行。本组实测用 Seq Scan，数字和完整计划在后面的证据中。</p><p lang="en">Execute and explain Query D, projecting complete event rows. Its text comparison with Collect follows database collation, not event chronology. It matches 188,283 rows under C collation; this setting produced Seq Scan in the recorded run.</p></div></li><li data-line-number="11" id="line-3-2-11"><div class="line-code"><a aria-label="第 11 行" class="line-number" href="#line-3-2-11">11</a><code>-- Setting 2: index scans enabled; sequential scans suppressed.</code></div><div class="pair line-explanation"><p lang="zh-CN">本段是第 2 组访问方法设置；注释只标记实验阶段，真正改变规划器选项的是下面四条 SET。同一文件必须在同一连接中执行，才能让设置影响后面的 EXPLAIN。</p><p lang="en">Label scan-setting group 2. The following SET commands, not the comment, change planner options; run the file within one connection.</p></div></li><li data-line-number="12" id="line-3-2-12"><div class="line-code"><a aria-label="第 12 行" class="line-number" href="#line-3-2-12">12</a><code>SET enable_indexscan = on;</code></div><div class="pair line-explanation"><p lang="zh-CN">enable_indexscan 控制普通 Index Scan 路径，也会影响 index-only 路径能否被考虑。本行设为 on，作用于当前会话后续语句，不修改表内容；三种索引相关开关要一起处理，才符合本题定义。</p><p lang="en">Set enable_indexscan to on for subsequent statements in this session: ordinary index scans, also required when considering index-only scans. This changes planner options, not table data.</p></div></li><li data-line-number="13" id="line-3-2-13"><div class="line-code"><a aria-label="第 13 行" class="line-number" href="#line-3-2-13">13</a><code>SET enable_indexonlyscan = on;</code></div><div class="pair line-explanation"><p lang="zh-CN">enable_indexonlyscan 控制Index Only Scan 路径；它还要求普通 index scan 被允许，并满足覆盖列等条件。本行设为 on，作用于当前会话后续语句，不修改表内容；三种索引相关开关要一起处理，才符合本题定义。</p><p lang="en">Set enable_indexonlyscan to on for subsequent statements in this session: index-only scans, which additionally require ordinary index scans and suitable coverage. This changes planner options, not table data.</p></div></li><li data-line-number="14" id="line-3-2-14"><div class="line-code"><a aria-label="第 14 行" class="line-number" href="#line-3-2-14">14</a><code>SET enable_bitmapscan = on;</code></div><div class="pair line-explanation"><p lang="zh-CN">enable_bitmapscan 控制Bitmap Index/Heap Scan 路径；只关普通 Index Scan 并不会连带关闭它。本行设为 on，作用于当前会话后续语句，不修改表内容；三种索引相关开关要一起处理，才符合本题定义。</p><p lang="en">Set enable_bitmapscan to on for subsequent statements in this session: bitmap access, which is not disabled merely by turning off ordinary index scans. This changes planner options, not table data.</p></div></li><li data-line-number="15" id="line-3-2-15"><div class="line-code"><a aria-label="第 15 行" class="line-number" href="#line-3-2-15">15</a><code>SET enable_seqscan = off;</code></div><div class="pair line-explanation"><p lang="zh-CN">enable_seqscan 控制Sequential Scan 路径；off 是抑制，并非保证任何情况下都绝对不会出现。本行设为 off，作用于当前会话后续语句，不修改表内容；三种索引相关开关要一起处理，才符合本题定义。</p><p lang="en">Set enable_seqscan to off for subsequent statements in this session: sequential scans; off discourages this method rather than guaranteeing its absence in every possible query. This changes planner options, not table data.</p></div></li><li data-line-number="16" id="line-3-2-16"><div class="line-code"><a aria-label="第 16 行" class="line-number" href="#line-3-2-16">16</a><code>-- Query C</code></div><div class="pair line-explanation"><p lang="zh-CN">标记接下来研究 Query C。注释本身不执行查询，结果应与同一设置组的另一条查询比较。</p><p lang="en">Label Query C; compare its plan with the other query under the same settings.</p></div></li><li data-line-number="17" id="line-3-2-17"><div class="line-code"><a aria-label="第 17 行" class="line-number" href="#line-3-2-17">17</a><code>EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM BOOKING_EVENTS WHERE event_type &lt; 'Collect';</code></div><div class="pair line-explanation"><p lang="zh-CN">EXPLAIN (ANALYZE, BUFFERS) 实际执行 Query C，SELECT * 需要整行事件。比较 event_type 小于字符串 Collect，是按数据库排序规则比较文字，不是比较事件发生先后；C collation 下匹配 8,158 行。本组实测用 Bitmap Heap Scan，数字和完整计划在后面的证据中。</p><p lang="en">Execute and explain Query C, projecting complete event rows. Its text comparison with Collect follows database collation, not event chronology. It matches 8,158 rows under C collation; this setting produced Bitmap Heap Scan in the recorded run.</p></div></li><li data-line-number="18" id="line-3-2-18"><div class="line-code"><a aria-label="第 18 行" class="line-number" href="#line-3-2-18">18</a><code>-- Query D</code></div><div class="pair line-explanation"><p lang="zh-CN">标记接下来研究 Query D。注释本身不执行查询，结果应与同一设置组的另一条查询比较。</p><p lang="en">Label Query D; compare its plan with the other query under the same settings.</p></div></li><li data-line-number="19" id="line-3-2-19"><div class="line-code"><a aria-label="第 19 行" class="line-number" href="#line-3-2-19">19</a><code>EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM BOOKING_EVENTS WHERE event_type &gt;= 'Collect';</code></div><div class="pair line-explanation"><p lang="zh-CN">EXPLAIN (ANALYZE, BUFFERS) 实际执行 Query D，SELECT * 需要整行事件。比较 event_type 大于等于字符串 Collect，是按数据库排序规则比较文字，不是比较事件发生先后；C collation 下匹配 188,283 行。本组实测用 Bitmap Heap Scan，数字和完整计划在后面的证据中。</p><p lang="en">Execute and explain Query D, projecting complete event rows. Its text comparison with Collect follows database collation, not event chronology. It matches 188,283 rows under C collation; this setting produced Bitmap Heap Scan in the recorded run.</p></div></li><li data-line-number="20" id="line-3-2-20"><div class="line-code"><a aria-label="第 20 行" class="line-number" href="#line-3-2-20">20</a><code>-- Setting 3: index scans suppressed; sequential scans enabled.</code></div><div class="pair line-explanation"><p lang="zh-CN">本段是第 3 组访问方法设置；注释只标记实验阶段，真正改变规划器选项的是下面四条 SET。同一文件必须在同一连接中执行，才能让设置影响后面的 EXPLAIN。</p><p lang="en">Label scan-setting group 3. The following SET commands, not the comment, change planner options; run the file within one connection.</p></div></li><li data-line-number="21" id="line-3-2-21"><div class="line-code"><a aria-label="第 21 行" class="line-number" href="#line-3-2-21">21</a><code>SET enable_indexscan = off;</code></div><div class="pair line-explanation"><p lang="zh-CN">enable_indexscan 控制普通 Index Scan 路径，也会影响 index-only 路径能否被考虑。本行设为 off，作用于当前会话后续语句，不修改表内容；三种索引相关开关要一起处理，才符合本题定义。</p><p lang="en">Set enable_indexscan to off for subsequent statements in this session: ordinary index scans, also required when considering index-only scans. This changes planner options, not table data.</p></div></li><li data-line-number="22" id="line-3-2-22"><div class="line-code"><a aria-label="第 22 行" class="line-number" href="#line-3-2-22">22</a><code>SET enable_indexonlyscan = off;</code></div><div class="pair line-explanation"><p lang="zh-CN">enable_indexonlyscan 控制Index Only Scan 路径；它还要求普通 index scan 被允许，并满足覆盖列等条件。本行设为 off，作用于当前会话后续语句，不修改表内容；三种索引相关开关要一起处理，才符合本题定义。</p><p lang="en">Set enable_indexonlyscan to off for subsequent statements in this session: index-only scans, which additionally require ordinary index scans and suitable coverage. This changes planner options, not table data.</p></div></li><li data-line-number="23" id="line-3-2-23"><div class="line-code"><a aria-label="第 23 行" class="line-number" href="#line-3-2-23">23</a><code>SET enable_bitmapscan = off;</code></div><div class="pair line-explanation"><p lang="zh-CN">enable_bitmapscan 控制Bitmap Index/Heap Scan 路径；只关普通 Index Scan 并不会连带关闭它。本行设为 off，作用于当前会话后续语句，不修改表内容；三种索引相关开关要一起处理，才符合本题定义。</p><p lang="en">Set enable_bitmapscan to off for subsequent statements in this session: bitmap access, which is not disabled merely by turning off ordinary index scans. This changes planner options, not table data.</p></div></li><li data-line-number="24" id="line-3-2-24"><div class="line-code"><a aria-label="第 24 行" class="line-number" href="#line-3-2-24">24</a><code>SET enable_seqscan = on;</code></div><div class="pair line-explanation"><p lang="zh-CN">enable_seqscan 控制Sequential Scan 路径；off 是抑制，并非保证任何情况下都绝对不会出现。本行设为 on，作用于当前会话后续语句，不修改表内容；三种索引相关开关要一起处理，才符合本题定义。</p><p lang="en">Set enable_seqscan to on for subsequent statements in this session: sequential scans; off discourages this method rather than guaranteeing its absence in every possible query. This changes planner options, not table data.</p></div></li><li data-line-number="25" id="line-3-2-25"><div class="line-code"><a aria-label="第 25 行" class="line-number" href="#line-3-2-25">25</a><code>-- Query C</code></div><div class="pair line-explanation"><p lang="zh-CN">标记接下来研究 Query C。注释本身不执行查询，结果应与同一设置组的另一条查询比较。</p><p lang="en">Label Query C; compare its plan with the other query under the same settings.</p></div></li><li data-line-number="26" id="line-3-2-26"><div class="line-code"><a aria-label="第 26 行" class="line-number" href="#line-3-2-26">26</a><code>EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM BOOKING_EVENTS WHERE event_type &lt; 'Collect';</code></div><div class="pair line-explanation"><p lang="zh-CN">EXPLAIN (ANALYZE, BUFFERS) 实际执行 Query C，SELECT * 需要整行事件。比较 event_type 小于字符串 Collect，是按数据库排序规则比较文字，不是比较事件发生先后；C collation 下匹配 8,158 行。本组实测用 Seq Scan，数字和完整计划在后面的证据中。</p><p lang="en">Execute and explain Query C, projecting complete event rows. Its text comparison with Collect follows database collation, not event chronology. It matches 8,158 rows under C collation; this setting produced Seq Scan in the recorded run.</p></div></li><li data-line-number="27" id="line-3-2-27"><div class="line-code"><a aria-label="第 27 行" class="line-number" href="#line-3-2-27">27</a><code>-- Query D</code></div><div class="pair line-explanation"><p lang="zh-CN">标记接下来研究 Query D。注释本身不执行查询，结果应与同一设置组的另一条查询比较。</p><p lang="en">Label Query D; compare its plan with the other query under the same settings.</p></div></li><li data-line-number="28" id="line-3-2-28"><div class="line-code"><a aria-label="第 28 行" class="line-number" href="#line-3-2-28">28</a><code>EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM BOOKING_EVENTS WHERE event_type &gt;= 'Collect';</code></div><div class="pair line-explanation"><p lang="zh-CN">EXPLAIN (ANALYZE, BUFFERS) 实际执行 Query D，SELECT * 需要整行事件。比较 event_type 大于等于字符串 Collect，是按数据库排序规则比较文字，不是比较事件发生先后；C collation 下匹配 188,283 行。本组实测用 Seq Scan，数字和完整计划在后面的证据中。</p><p lang="en">Execute and explain Query D, projecting complete event rows. Its text comparison with Collect follows database collation, not event chronology. It matches 188,283 rows under C collation; this setting produced Seq Scan in the recorded run.</p></div></li><li data-line-number="29" id="line-3-2-29"><div class="line-code"><a aria-label="第 29 行" class="line-number" href="#line-3-2-29">29</a><code>-- Restore all four scan settings.</code></div><div class="pair line-explanation"><p lang="zh-CN">实验结束，下面四行把全部扫描选项明确恢复为 on。必须清理会话设置，避免下一题继承被抑制的访问方法。</p><p lang="en">Finish the experiment by explicitly restoring all four scan options to on so the next question does not inherit suppressed methods.</p></div></li><li data-line-number="30" id="line-3-2-30"><div class="line-code"><a aria-label="第 30 行" class="line-number" href="#line-3-2-30">30</a><code>SET enable_indexscan = on;</code></div><div class="pair line-explanation"><p lang="zh-CN">enable_indexscan 控制普通 Index Scan 路径，也会影响 index-only 路径能否被考虑。本行设为 on，作用于当前会话后续语句，不修改表内容；这属于最后的恢复步骤。</p><p lang="en">Set enable_indexscan to on for subsequent statements in this session: ordinary index scans, also required when considering index-only scans. This changes planner options, not table data.</p></div></li><li data-line-number="31" id="line-3-2-31"><div class="line-code"><a aria-label="第 31 行" class="line-number" href="#line-3-2-31">31</a><code>SET enable_indexonlyscan = on;</code></div><div class="pair line-explanation"><p lang="zh-CN">enable_indexonlyscan 控制Index Only Scan 路径；它还要求普通 index scan 被允许，并满足覆盖列等条件。本行设为 on，作用于当前会话后续语句，不修改表内容；这属于最后的恢复步骤。</p><p lang="en">Set enable_indexonlyscan to on for subsequent statements in this session: index-only scans, which additionally require ordinary index scans and suitable coverage. This changes planner options, not table data.</p></div></li><li data-line-number="32" id="line-3-2-32"><div class="line-code"><a aria-label="第 32 行" class="line-number" href="#line-3-2-32">32</a><code>SET enable_bitmapscan = on;</code></div><div class="pair line-explanation"><p lang="zh-CN">enable_bitmapscan 控制Bitmap Index/Heap Scan 路径；只关普通 Index Scan 并不会连带关闭它。本行设为 on，作用于当前会话后续语句，不修改表内容；这属于最后的恢复步骤。</p><p lang="en">Set enable_bitmapscan to on for subsequent statements in this session: bitmap access, which is not disabled merely by turning off ordinary index scans. This changes planner options, not table data.</p></div></li><li data-line-number="33" id="line-3-2-33"><div class="line-code"><a aria-label="第 33 行" class="line-number" href="#line-3-2-33">33</a><code>SET enable_seqscan = on;</code></div><div class="pair line-explanation"><p lang="zh-CN">enable_seqscan 控制Sequential Scan 路径；off 是抑制，并非保证任何情况下都绝对不会出现。本行设为 on，作用于当前会话后续语句，不修改表内容；这属于最后的恢复步骤。</p><p lang="en">Set enable_seqscan to on for subsequent statements in this session: sequential scans; off discourages this method rather than guaranteeing its absence in every possible query. This changes planner options, not table data.</p></div></li></ol></details>
+<details class="evidence-details"><summary>完整执行计划 / Full query plan · 3.2</summary><pre class="evidence-output"><code>-- Setting 1: index scans enabled; sequential scans enabled.
+SET enable_indexscan = on;
+SET
+SET enable_indexonlyscan = on;
+SET
+SET enable_bitmapscan = on;
+SET
+SET enable_seqscan = on;
+SET
+-- Query C
+EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM BOOKING_EVENTS WHERE event_type &lt; 'Collect';
+                                                              QUERY PLAN                                                               
+---------------------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on booking_events  (cost=179.44..1910.62 rows=7615 width=38) (actual time=0.562..4.431 rows=8158.00 loops=1)
+   Recheck Cond: ((event_type)::text &lt; 'Collect'::text)
+   Heap Blocks: exact=1625
+   Buffers: shared hit=1628 read=31
+   -&gt;  Bitmap Index Scan on idx_event_type_time  (cost=0.00..177.53 rows=7615 width=0) (actual time=0.463..0.464 rows=8158.00 loops=1)
+         Index Cond: ((event_type)::text &lt; 'Collect'::text)
+         Index Searches: 1
+         Buffers: shared hit=3 read=31
+ Planning:
+   Buffers: shared hit=99
+ Planning Time: 1.580 ms
+ Execution Time: 4.667 ms
+(12 rows)
+
+-- Query D
+EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM BOOKING_EVENTS WHERE event_type &gt;= 'Collect';
+                                                        QUERY PLAN                                                        
+--------------------------------------------------------------------------------------------------------------------------
+ Seq Scan on booking_events  (cost=0.00..4091.51 rows=188826 width=38) (actual time=0.017..10.615 rows=188283.00 loops=1)
+   Filter: ((event_type)::text &gt;= 'Collect'::text)
+   Rows Removed by Filter: 8158
+   Buffers: shared hit=1636
+ Planning:
+   Buffers: shared hit=3
+ Planning Time: 0.065 ms
+ Execution Time: 14.145 ms
+(8 rows)
+
+-- Setting 2: index scans enabled; sequential scans suppressed.
+SET enable_indexscan = on;
+SET
+SET enable_indexonlyscan = on;
+SET
+SET enable_bitmapscan = on;
+SET
+SET enable_seqscan = off;
+SET
+-- Query C
+EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM BOOKING_EVENTS WHERE event_type &lt; 'Collect';
+                                                              QUERY PLAN                                                               
+---------------------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on booking_events  (cost=179.44..1910.62 rows=7615 width=38) (actual time=0.403..1.914 rows=8158.00 loops=1)
+   Recheck Cond: ((event_type)::text &lt; 'Collect'::text)
+   Heap Blocks: exact=1625
+   Buffers: shared hit=1659
+   -&gt;  Bitmap Index Scan on idx_event_type_time  (cost=0.00..177.53 rows=7615 width=0) (actual time=0.272..0.272 rows=8158.00 loops=1)
+         Index Cond: ((event_type)::text &lt; 'Collect'::text)
+         Index Searches: 1
+         Buffers: shared hit=34
+ Planning Time: 0.082 ms
+ Execution Time: 2.242 ms
+(10 rows)
+
+-- Query D
+EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM BOOKING_EVENTS WHERE event_type &gt;= 'Collect';
+                                                                 QUERY PLAN                                                                 
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on booking_events  (cost=4387.82..8384.15 rows=188826 width=38) (actual time=6.280..13.643 rows=188283.00 loops=1)
+   Recheck Cond: ((event_type)::text &gt;= 'Collect'::text)
+   Heap Blocks: exact=1636
+   Buffers: shared hit=1868 read=493
+   -&gt;  Bitmap Index Scan on idx_event_type_time  (cost=0.00..4340.61 rows=188826 width=0) (actual time=6.180..6.181 rows=188283.00 loops=1)
+         Index Cond: ((event_type)::text &gt;= 'Collect'::text)
+         Index Searches: 1
+         Buffers: shared hit=232 read=493
+ Planning Time: 0.065 ms
+ Execution Time: 17.270 ms
+(10 rows)
+
+-- Setting 3: index scans suppressed; sequential scans enabled.
+SET enable_indexscan = off;
+SET
+SET enable_indexonlyscan = off;
+SET
+SET enable_bitmapscan = off;
+SET
+SET enable_seqscan = on;
+SET
+-- Query C
+EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM BOOKING_EVENTS WHERE event_type &lt; 'Collect';
+                                                     QUERY PLAN                                                      
+---------------------------------------------------------------------------------------------------------------------
+ Seq Scan on booking_events  (cost=0.00..4091.51 rows=7615 width=38) (actual time=0.009..7.727 rows=8158.00 loops=1)
+   Filter: ((event_type)::text &lt; 'Collect'::text)
+   Rows Removed by Filter: 188283
+   Buffers: shared hit=1636
+ Planning Time: 0.066 ms
+ Execution Time: 7.886 ms
+(6 rows)
+
+-- Query D
+EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM BOOKING_EVENTS WHERE event_type &gt;= 'Collect';
+                                                        QUERY PLAN                                                        
+--------------------------------------------------------------------------------------------------------------------------
+ Seq Scan on booking_events  (cost=0.00..4091.51 rows=188826 width=38) (actual time=0.008..10.409 rows=188283.00 loops=1)
+   Filter: ((event_type)::text &gt;= 'Collect'::text)
+   Rows Removed by Filter: 8158
+   Buffers: shared hit=1636
+ Planning Time: 0.073 ms
+ Execution Time: 13.995 ms
+(6 rows)
+
+-- Restore all four scan settings.
+SET enable_indexscan = on;
+SET
+SET enable_indexonlyscan = on;
+SET
+SET enable_bitmapscan = on;
+SET
+SET enable_seqscan = on;
+SET
+</code></pre><div class="part-links"><span class="local-material-reference">原始日志 / Raw transcript ↗（原资料留在本地版）</span><span class="local-material-reference">输出截图 / Output screenshots ↗（原资料留在本地版）</span></div></details>
+</div></details><label class="mastery-control"><input data-mastered="A2-3.2" type="checkbox"/><span lang="zh-CN">我能解释并独立复现这题</span><span lang="en">I can explain and reproduce this part.</span></label></div>
+</section><div class="source"><strong>概念核对 / Official references</strong> · <a href="https://www.postgresql.org/docs/18/queries-table-expressions.html" rel="noopener" target="_blank">连接与 NULL / Joins and null extension</a> · <a href="https://www.postgresql.org/docs/18/sql-explain.html" rel="noopener" target="_blank">执行计划 / Execution plans</a></div><div class="button-row assignment-actions"><a class="button" href="q2.html">← 上一单元</a><a class="button" href="index.html">返回专项地图</a><a class="button primary" href="q4.html">下一单元 →</a></div></article></main></div>
+<footer class="site-footer">INFS7903 · SEMESTER 2 / 2026 <span>本地双语资料 · A2 实测复盘更新 2026.10.27</span></footer><div aria-live="polite" id="studio-toast" role="status"></div></body></html>
