@@ -19,7 +19,7 @@
  const a2Nav=document.querySelector('[data-a2-section-nav]'),a2Select=document.querySelector('[data-a2-section-select]');
  if(a2Nav){
   a2Nav.querySelectorAll('[data-a2-route]').forEach(a=>{if(new URL(a.href).pathname===here)a.setAttribute('aria-current','page');});
-  if(a2Select){for(const o of a2Select.options)if(new URL(o.value,location.href).pathname===here)a2Select.value=o.value;a2Select.addEventListener('change',()=>location.assign(a2Select.value));a2Select.closest('label').hidden=false;document.body.classList.add('a2-nav-ready');}
+  if(a2Select){for(const o of a2Select.options)if(new URL(o.value,location.href).pathname===here)a2Select.value=o.value;a2Select.addEventListener('change',()=>window.StudyTransitions?window.StudyTransitions.navigate(a2Select.value):location.assign(a2Select.value));a2Select.closest('label').hidden=false;document.body.classList.add('a2-nav-ready');}
  }
  // Measure the actual header stack: resized Mac windows and translated labels
  // must not hide anchored questions or individual code lines behind sticky bars.

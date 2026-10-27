@@ -1,0 +1,13 @@
+/* Original effects: small pixel cover for entering A2, a soft content transition
+   for lesson changes. No runtime dependency or full-page fetch/replacement. */
+@media screen{
+ .page-pixel-layer{position:fixed;z-index:30;display:grid;gap:0;overflow:hidden;pointer-events:none;contain:layout paint style;border-radius:8px}
+ .page-pixel{display:block;min-width:0;min-height:0;transform-origin:center;border-radius:1px;will-change:transform,opacity}
+ .motion-toggle{flex:none;padding:6px 9px!important;min-height:32px;font-size:10px!important;white-space:nowrap;color:#c2b29f;background:#1e1812;border-color:#51402c}
+ .motion-toggle[aria-pressed="false"]{color:#a0a0a0;background:#161616;border-color:#383838}
+ @media(max-width:640px){.a2-section-select-label{grid-template-columns:minmax(0,1fr)!important}.a2-section-select-label>span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}.motion-toggle{padding:6px 7px!important;font-size:10px!important}}
+}
+@media(prefers-reduced-motion:reduce){
+ .page-pixel-layer{display:none!important}
+}
+@media print{.page-pixel-layer,.motion-toggle{display:none!important}}

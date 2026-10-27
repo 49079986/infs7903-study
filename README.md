@@ -12,6 +12,7 @@ A static, bilingual database learning website with 13 chapters and 11 interactiv
 - Progress and drafts stay in your browser. There is no account system or cross-device synchronization.
 - Use **作业 A2** in the main navigation, then the persistent A2 navigation to switch between the introduction, Q1–Q4, tutor practice and the full walkthrough. Narrow windows use a native unit selector.
 - Designed for modern macOS Safari and Chrome as well as Windows: system fonts, SF Mono / Menlo code fallbacks, keyboard focus, responsive navigation and a selected-code fallback for Command+C.
+- Page motion uses an original, dependency-free pixel cover when entering A2, and a short fade/slide of the destination content between lessons. Header and navigation are never animated. Browsers without Web Animations keep ordinary page navigation. Reduced-motion preferences and the A2 navigation's transition toggle disable page effects. Native links, anchors, downloads and browser history are preserved.
 
 ## Publish with GitHub Pages
 
